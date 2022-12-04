@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "163513503884",
+    "project_id": "workersinn-945d4",
+    "storage_bucket": "workersinn-945d4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163513503884:android:b2b23a339eb75e022e6ba9",
+        "android_client_info": {
+          "package_name": "com.example.workers_inn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163513503884-egfn537cvs6kq1ughpjp5m7qoissdma0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVW6R446fiq2lVnmQh7pYnnmx_vyAmb40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163513503884-egfn537cvs6kq1ughpjp5m7qoissdma0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
