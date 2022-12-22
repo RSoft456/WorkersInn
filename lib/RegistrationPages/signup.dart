@@ -24,13 +24,50 @@ class _SignUpState extends State<SignUp> {
     super.initState();
   }
 
-  RegisterUser() async {
-    UserCredential user =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: email.text,
-      password: password.text,
+  customDialog(String message) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(message),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                if (message == "Signed up Successfully") {
+                  Navigator.pop(context);
+                  Navigator.of(context).pop(email.text);
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text("ok"),
+            ),
+          ],
+        );
+      },
     );
-    log("${user.user!.email}");
+  }
+
+  RegisterUser() async {
+    try {
+      UserCredential user =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email.text,
+        password: password.text,
+      );
+      await FirebaseAuth.instance.signOut();
+      customDialog("Signed up Successfully");
+      log("${user.user!.email}");
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "invalid-email") {
+        customDialog("Invalid Email. Please Enter a Correct Email");
+      } else if (e.code == "email-already-in-use") {
+        customDialog("Email is Already Registered");
+      } else if (e.code == "weak-password") {
+        customDialog("Enter a Strong Password");
+      }
+    }
   }
 
   @override
@@ -71,7 +108,7 @@ class _SignUpState extends State<SignUp> {
                           height: MediaQuery.of(context).size.height * 0.03,
                         ),
                         Text(
-                          "Sign Ups",
+                          "Sign Up",
                           style: GoogleFonts.merriweather(
                               fontSize: 25,
                               color: Colors.orange,

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,18 +15,21 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
+  bool noException = true;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   UserSignIn() async {
     try {
+      log("hi1");
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: email.text, password: password.text);
       log("${user.user!.email}");
     } on FirebaseAuthException catch (e) {
+      noException = false;
       log("$e");
+      log("hi2");
       String message = "";
-
       if (e.code == "invalid-email" || e.code == "wrong-password") {
         message = "Invalid username or password";
       } else if (e.code == "user-disabled") {
@@ -35,7 +37,6 @@ class _SignInState extends State<SignIn> {
       } else if (e.code == "user-not-found") {
         message = "User not registered, Sign Up";
       }
-
       showDialog(
           barrierDismissible: false,
           context: context,
@@ -51,7 +52,11 @@ class _SignInState extends State<SignIn> {
               ],
             );
           });
-    } finally {
+    }
+    log("$noException");
+    if (noException) {
+      noException = true;
+      log("hi3");
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => const Home(),
       ));
@@ -87,9 +92,9 @@ class _SignInState extends State<SignIn> {
 
                 //height: MediaQuery.of(context).size.height * 0.95,
                 width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
+                child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
                     child: Column(
                       children: [
                         SizedBox(
@@ -192,9 +197,17 @@ class _SignInState extends State<SignIn> {
                               width: MediaQuery.of(context).size.width * 0.02,
                             ),
                             GestureDetector(
-                              onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => const SignUp())),
+                              onTap: () => Navigator.of(context)
+                                  .push(
+                                MaterialPageRoute(
+                                  builder: (context) => const SignUp(),
+                                ),
+                              )
+                                  .then((value) {
+                                log("value returned: $value");
+                                email.text = value;
+                                setState(() {});
+                              }),
                               child: Text(
                                 "Sign Up here.",
                                 style: GoogleFonts.merriweather(fontSize: 13),

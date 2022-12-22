@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,6 +13,33 @@ class FrogotPassword extends StatefulWidget {
 
 class _FrogotPasswordState extends State<FrogotPassword> {
   bool visibility = false;
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  void showSnackbar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 5),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future emailVerification() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: emailController.text);
+      showSnackbar("verification email sent");
+      Future.delayed(
+        const Duration(seconds: 3),
+        () => {Navigator.of(context).pop()},
+      );
+    } on FirebaseAuthException catch (e) {
+      log("$e");
+      showSnackbar(e.message.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +76,7 @@ class _FrogotPasswordState extends State<FrogotPassword> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: TextField(
+                              controller: emailController,
                               decoration: InputDecoration(
                                   label: Text(
                                     "Email",
@@ -99,10 +130,7 @@ class _FrogotPasswordState extends State<FrogotPassword> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20))),
                           onPressed: () {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              visibility = true;
-                            });
+                            emailVerification();
                           },
                           child: const Text(
                             "Reset",
