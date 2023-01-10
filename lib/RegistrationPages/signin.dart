@@ -25,6 +25,9 @@ class _SignInState extends State<SignIn> {
           .signInWithEmailAndPassword(
               email: email.text, password: password.text);
       log("${user.user!.email}");
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const Home(),
+      ));
     } on FirebaseAuthException catch (e) {
       noException = false;
       log("$e");
@@ -52,14 +55,6 @@ class _SignInState extends State<SignIn> {
               ],
             );
           });
-    }
-    log("$noException");
-    if (noException) {
-      noException = true;
-      log("hi3");
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const Home(),
-      ));
     }
   }
 

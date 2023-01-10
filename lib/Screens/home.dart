@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:workers_inn/Screens/maps.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,26 +13,13 @@ class _HomeState extends State<Home> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    double padding = MediaQuery.of(context).padding.top;
-    return Scaffold(
-      body: SizedBox(
-        width: width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Name: ${user!.email as String}"),
-            ElevatedButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              child: const Text("Logout"),
-            ),
-          ],
-        ),
-      ),
+    // This is used in the platform side to register the view.
+    const String viewType = '<platform-view-type>';
+    // Pass parameters to the platform side.
+    final Map<String, dynamic> creationParams = <String, dynamic>{};
+
+    return const MaterialApp(
+      home: MapSample(),
     );
   }
 }
