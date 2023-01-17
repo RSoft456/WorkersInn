@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workers_inn/Screens/maps.dart';
+import 'package:workers_inn/Screens/mainScreen.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
     final Map<String, dynamic> creationParams = <String, dynamic>{};
 
     return const MaterialApp(
-      home: MapSample(),
+      home: MainScreen(),
     );
   }
 }

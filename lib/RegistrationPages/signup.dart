@@ -99,9 +99,9 @@ class _SignUpState extends State<SignUp> {
 
                 //height: MediaQuery.of(context).size.height * 0.95,
                 width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
+                child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
                     child: Column(
                       children: [
                         SizedBox(
