@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workers_inn/Screens/worker_request_listview.dart';
 import 'package:workers_inn/variables.dart';
 
 class RequestsPage extends StatefulWidget {
@@ -11,6 +12,7 @@ class RequestsPage extends StatefulWidget {
 class _RequestsPageState extends State<RequestsPage> {
   @override
   Widget build(BuildContext context) {
+    Size Screensize = MediaQuery.of(context).size;
     //default backpress manipulation
     return WillPopScope(
       onWillPop: () async {
@@ -18,6 +20,7 @@ class _RequestsPageState extends State<RequestsPage> {
       },
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.orange,
           title: const Text('Worker Requests'),
           automaticallyImplyLeading: false,
           actions: [
@@ -33,15 +36,17 @@ class _RequestsPageState extends State<RequestsPage> {
                             ElevatedButton(
                                 onPressed: () {
                                   Navigator.pop(ctx);
+                                },
+                                child: const Text("no")),
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(ctx);
 
                                   Navigator.pop(context);
                                 },
-                                child: const Text("ok")),
-                            ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("cancel")),
+                                child: const Text(
+                                  "yes",
+                                )),
                           ],
                         );
                       });
@@ -52,13 +57,12 @@ class _RequestsPageState extends State<RequestsPage> {
                 )),
           ],
         ),
-        body: Stack(
-          children: const [
-            CircularProgressIndicator(
-              value: 0.8,
-              strokeWidth: 7,
-            ),
-          ],
+        body: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: 8,
+          itemBuilder: (context, index) {
+            return const WorkerRequestList();
+          },
         ),
       ),
     );

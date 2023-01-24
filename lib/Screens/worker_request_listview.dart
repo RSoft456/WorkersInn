@@ -1,0 +1,235 @@
+import 'package:flutter/material.dart';
+import 'package:workers_inn/Screens/negotiationScreenCustomer.dart';
+
+class WorkerRequestList extends StatefulWidget {
+  const WorkerRequestList({super.key});
+
+  @override
+  State<WorkerRequestList> createState() => _WorkerRequestListState();
+}
+
+class _WorkerRequestListState extends State<WorkerRequestList> {
+  @override
+  Widget build(BuildContext context) {
+    Size Screensize = MediaQuery.of(context).size;
+    return Card(
+        color: const Color.fromARGB(255, 255, 255, 255),
+        elevation: 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.08,
+                    width: MediaQuery.of(context).size.height * 0.08,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.orange, width: 4),
+                        borderRadius: BorderRadius.circular(50),
+                        image: const DecorationImage(
+                          image: AssetImage("assets/profile.png"),
+                          fit: BoxFit.fill,
+                        )),
+                  ),
+                  SizedBox(
+                    width: Screensize.width * 0.65,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          children: const [
+                            Text(
+                              "John Doe",
+                              style: TextStyle(fontSize: 22),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                "Rating: 4.5",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      InkWell(
+                        onTap: () => dialog(),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          child: SizedBox(
+                            width: Screensize.width * 0.09,
+                            height: Screensize.width * 0.09,
+                            child: const Icon(
+                              Icons.info_outline,
+                              color: Colors.orange,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.09,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  alignment: const Alignment(-6, 0),
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50))),
+                              onPressed: () {},
+                              child: const Text(
+                                "4",
+                                style: TextStyle(color: Colors.black),
+                              )),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+                width: Screensize.width * 0.87,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                    width: Screensize.width * 0.3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const NegotiationCustomer()));
+                          },
+                          child: const Text(
+                            "Accept",
+                            style: TextStyle(fontSize: 18),
+                          )),
+                    ),
+                  ),
+                )),
+          ],
+        ));
+  }
+
+  dialog() {
+    Size screen = MediaQuery.of(context).size;
+    showDialog(
+        barrierDismissible: false,
+        context: (context),
+        builder: (context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                  vertical: screen.height * 0.2,
+                  horizontal: screen.width * 0.09),
+              clipBehavior: Clip.hardEdge,
+              content: Column(
+                children: [
+                  Container(
+                    height: screen.height * 0.15,
+                    width: screen.height * 0.15,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      border: Border.all(color: Colors.orange, width: 4),
+                      borderRadius: BorderRadius.circular(100),
+                      image: const DecorationImage(
+                        image: AssetImage("assets/profile.png"),
+                        //fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("John Doe"),
+                  ),
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Text("Age: 34"),
+                      )),
+                  Wrap(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: Chip(
+                          label: Text("Plumber"),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: Chip(
+                          label: Text("Electrician"),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: Chip(
+                          label: Text("Cleaner"),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: Chip(
+                          label: Text("Electrician"),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: Chip(
+                          label: Text("Electrician"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Text(
+                          "Description: ",
+                        ),
+                      )),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                          padding:
+                              const EdgeInsets.only(left: 5, top: 5, bottom: 5),
+                          child: Card(
+                            // color: const Color.fromARGB(255, 228, 216, 177),
+                            child: SingleChildScrollView(
+                              child: SizedBox(
+                                height: screen.height * 0.04,
+                                child: const Text(
+                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                              ),
+                            ),
+                          ))),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("OK"),
+                    ),
+                  ),
+                ],
+              ));
+        });
+  }
+}
