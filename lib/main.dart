@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workers_inn/RegistrationPages/signin.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:workers_inn/Screens/chats_class_provider.dart';
 import 'package:workers_inn/Screens/home.dart';
 import 'package:workers_inn/firebase_options.dart';
 
@@ -12,7 +14,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AllChats()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

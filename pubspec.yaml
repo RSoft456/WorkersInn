@@ -42,6 +42,8 @@ dependencies:
   firebase_auth: ^4.1.5
   google_maps_flutter: ^2.2.3
   url_launcher: ^6.1.8
+  flutter_firebase_chat_core: ^1.6.4
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:
