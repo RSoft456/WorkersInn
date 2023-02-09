@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:workers_inn/RegistrationPages/forgotpassword.dart';
 import 'package:workers_inn/RegistrationPages/signup.dart';
 import 'package:workers_inn/Screens/home.dart';
+import 'package:workers_inn/variables.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -176,7 +177,8 @@ class _SignInState extends State<SignIn> {
                             },
                             child: Text(
                               "SignIn",
-                              style: GoogleFonts.merriweather(fontSize: 18),
+                              style: GoogleFonts.merriweather(
+                                  fontSize: 18, color: white),
                             )),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.02,
@@ -227,15 +229,15 @@ class _SignInState extends State<SignIn> {
                               width: MediaQuery.of(context).size.width * 0.47,
                               child: Row(
                                 children: [
-                                  const FaIcon(FontAwesomeIcons.google),
+                                  FaIcon(FontAwesomeIcons.google, color: white),
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width *
                                         0.03,
                                   ),
                                   Text(
                                     "SignIn with google",
-                                    style:
-                                        GoogleFonts.merriweather(fontSize: 15),
+                                    style: GoogleFonts.merriweather(
+                                        fontSize: 15, color: white),
                                   ),
                                 ],
                               ),

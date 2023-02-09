@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workers_inn/RegistrationPages/signin.dart';
+import 'package:workers_inn/workerModule/WorkerRegistration.dart';
 
 class drawer extends StatelessWidget {
   const drawer({super.key});
@@ -21,6 +22,16 @@ class drawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            title: const Text('Worker Mode'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: ((context) => const WorkerRegistration())),
+              );
+            },
+          ),
+          ListTile(
             title: const Text('Log Out'),
             onTap: () {
               FirebaseAuth.instance.signOut();
@@ -28,12 +39,6 @@ class drawer extends StatelessWidget {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: ((context) => const SignIn())),
                   (route) => false);
-            },
-          ),
-          ListTile(
-            title: const Text('Item 2'),
-            onTap: () {
-              Navigator.pop(context);
             },
           ),
         ],

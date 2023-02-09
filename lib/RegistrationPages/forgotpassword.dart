@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:workers_inn/variables.dart';
 
 class FrogotPassword extends StatefulWidget {
   const FrogotPassword({super.key});
@@ -132,9 +133,9 @@ class _FrogotPasswordState extends State<FrogotPassword> {
                           onPressed: () {
                             emailVerification();
                           },
-                          child: const Text(
+                          child: Text(
                             "Reset",
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(fontSize: 18, color: white),
                           )),
                     ],
                   ),

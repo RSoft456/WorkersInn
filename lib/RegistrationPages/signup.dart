@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:workers_inn/variables.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -233,7 +234,8 @@ class _SignUpState extends State<SignUp> {
                             },
                             child: Text(
                               "Signup",
-                              style: GoogleFonts.merriweather(fontSize: 18),
+                              style: GoogleFonts.merriweather(
+                                  fontSize: 18, color: white),
                             )),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.02,

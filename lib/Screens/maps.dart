@@ -30,7 +30,7 @@ class MapSampleState extends State<MapSample> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.7,
       child: GoogleMap(
-        mapType: MapType.hybrid,
+        mapType: MapType.none,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);

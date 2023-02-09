@@ -126,6 +126,7 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
   dialog() {
     Size screen = MediaQuery.of(context).size;
     showDialog(
+        barrierColor: const Color.fromARGB(174, 0, 0, 0),
         barrierDismissible: false,
         context: (context),
         builder: (context) {

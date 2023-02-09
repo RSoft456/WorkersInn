@@ -1,18 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:workers_inn/workerModule/WorkerMapOverlay.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:workers_inn/Screens/drawer.dart';
-import 'package:workers_inn/Screens/mapOverlay.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+import '../Screens/drawer.dart';
+
+class WorkerMainPage extends StatefulWidget {
+  const WorkerMainPage({super.key});
 
   @override
-  State<MainScreen> createState() => MainScreenState();
+  State<WorkerMainPage> createState() => _WorkerMainPageState();
 }
 
-class MainScreenState extends State<MainScreen> {
+class _WorkerMainPageState extends State<WorkerMainPage> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
@@ -41,7 +41,7 @@ class MainScreenState extends State<MainScreen> {
         body: Stack(
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.8,
+              height: MediaQuery.of(context).size.height * 0.9,
               child: GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: _kGooglePlex,
@@ -50,7 +50,7 @@ class MainScreenState extends State<MainScreen> {
                 },
               ),
             ),
-            const MapOverlay(),
+            const WorkerMapOverlay(),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -63,10 +63,5 @@ class MainScreenState extends State<MainScreen> {
         drawer: const drawer(),
       ),
     );
-  }
-
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }

@@ -13,6 +13,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
+    TextEditingController mesage = TextEditingController();
     Size screenSize = MediaQuery.of(context).size;
     var chat = Provider.of<AllChats>(context);
     return SizedBox(
@@ -28,16 +29,22 @@ class _ChatScreenState extends State<ChatScreen> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          width: screenSize.width * 0.7,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(66, 189, 143, 143),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            chat.chats[index].msg,
-                            style: const TextStyle(fontSize: 30),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            width: screenSize.width * 0.7,
+                            decoration: const BoxDecoration(
+                              color: Color.fromARGB(119, 252, 239, 165),
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                  topLeft: Radius.circular(20)),
+                            ),
+                            child: Text(
+                              chat.chats[index].msg,
+                              style: const TextStyle(fontSize: 20),
+                            ),
                           ),
                         ),
                       ],
@@ -46,17 +53,23 @@ class _ChatScreenState extends State<ChatScreen> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          width: screenSize.width * 0.7,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(66, 201, 160, 160),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            chat.chats[index].msg,
-                            style: const TextStyle(fontSize: 30),
-                            softWrap: true,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            width: screenSize.width * 0.7,
+                            decoration: const BoxDecoration(
+                              color: Color.fromARGB(119, 252, 239, 165),
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                  topRight: Radius.circular(20)),
+                            ),
+                            child: Text(
+                              chat.chats[index].msg,
+                              style: const TextStyle(fontSize: 20),
+                              softWrap: true,
+                            ),
                           ),
                         ),
                       ],
@@ -67,17 +80,23 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           Container(
-            color: const Color.fromARGB(66, 189, 143, 143),
+            // color: const Color.fromARGB(66, 189, 143, 143),
             child: TextField(
-              onSubmitted: (value) {
-                context.read<AllChats>().addChat(
-                    Chat(msg: value, type: "no", userName: "Joyhn Doe"));
-              },
-              decoration: const InputDecoration(
+              controller: mesage,
+              decoration: InputDecoration(
                   hintText: "Type message",
-                  suffixIcon: Icon(Icons.send),
-                  label: Text("Type message"),
-                  border: OutlineInputBorder(
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        if (mesage.text != "") {
+                          context.read<AllChats>().addChat(Chat(
+                              msg: mesage.text,
+                              type: "user",
+                              userName: "Joyhn Doe"));
+                        }
+                      },
+                      icon: const Icon(Icons.send)),
+                  label: const Text("Type message"),
+                  border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20)))),
             ),
           ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uuid/uuid.dart';
+import 'package:workers_inn/Screens/address_search.dart';
+import 'package:workers_inn/Screens/place_service.dart';
 import 'package:workers_inn/Screens/requests.dart';
-import 'package:workers_inn/Screens/searchLocation.dart';
 import 'package:workers_inn/variables.dart';
 
 class MapOverlay extends StatefulWidget {
@@ -102,25 +104,33 @@ class _MapOverlayState extends State<MapOverlay> {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
-                    onTap: () {
-                      showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(45),
-                                  topRight: Radius.circular(45))),
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (context) {
-                            return Wrap(
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.9,
-                                  child: const locationSearcher(),
-                                )
-                              ],
-                            );
-                          });
+                    onTap: () async {
+                      final sessionToken = const Uuid().v4();
+                      Suggestion? result = await showSearch(
+                        context: context,
+                        delegate: AddressSearch(sessionToken: sessionToken),
+                      );
+                      var latlong = await PlaceApiProvider(sessionToken)
+                          .getPlaceDetailFromId(result!.placeId);
+                      // showModalBottomSheet(
+                      //     shape: const RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.only(
+                      //             topLeft: Radius.circular(45),
+                      //             topRight: Radius.circular(45))),
+                      //     isScrollControlled: true,
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return Wrap(
+                      //         children: [
+                      //           SizedBox(
+                      //             height:
+                      //                 MediaQuery.of(context).size.height * 0.9,
+                      //             child:
+                      //                 Container(), //const locationSearcher(),
+                      //           )
+                      //         ],
+                      //       );
+                      //     });
                     },
                     keyboardType: TextInputType.none,
                     controller: locationController,
