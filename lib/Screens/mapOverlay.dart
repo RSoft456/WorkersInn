@@ -112,6 +112,7 @@ class _MapOverlayState extends State<MapOverlay> {
                       );
                       var latlong = await PlaceApiProvider(sessionToken)
                           .getPlaceDetailFromId(result!.placeId);
+                      //print(latlong);
                       // showModalBottomSheet(
                       //     shape: const RoundedRectangleBorder(
                       //         borderRadius: BorderRadius.only(

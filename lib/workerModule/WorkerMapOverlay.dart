@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:workers_inn/Screens/requests.dart';
 import 'package:workers_inn/Screens/searchLocation.dart';
 import 'package:workers_inn/variables.dart';
+import 'package:workers_inn/workerModule/workerRequestPage.dart';
 
 class WorkerMapOverlay extends StatefulWidget {
   const WorkerMapOverlay({super.key});
@@ -83,7 +83,7 @@ class _WorkerMapOverlayState extends State<WorkerMapOverlay> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const RequestsPage()));
+                              builder: (context) => const WorkRequestPage()));
                       // if (selectedJob == 0) {
                       //   showDialog(
                       //       barrierDismissible: false,

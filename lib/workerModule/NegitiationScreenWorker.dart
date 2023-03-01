@@ -44,8 +44,41 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.orange),
-                          onPressed: () {},
-                          child: const Text("Rs.00")),
+                          onPressed: () {
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (ctx) {
+                                  return AlertDialog(
+                                    content: const TextField(
+                                      decoration: InputDecoration(
+                                          hintText: "Enter Price",
+                                          label: Text("Enter Price"),
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)))),
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pop(ctx);
+                                          },
+                                          child: const Text("no")),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pop(ctx);
+
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text(
+                                            "yes",
+                                          )),
+                                    ],
+                                  );
+                                });
+                          },
+                          child: const Text("Enter Price")),
                     ),
                   ),
                   Padding(
