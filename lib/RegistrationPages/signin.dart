@@ -213,7 +213,7 @@ class _SignInState extends State<SignIn> {
                           ],
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.2,
+                          height: MediaQuery.of(context).size.height * 0.14,
                         ),
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -226,7 +226,7 @@ class _SignInState extends State<SignIn> {
                             ),
                             onPressed: () {},
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.47,
+                              width: MediaQuery.of(context).size.width * 0.5,
                               child: Row(
                                 children: [
                                   FaIcon(FontAwesomeIcons.google, color: white),

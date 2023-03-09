@@ -37,7 +37,8 @@ class _MapOverlayState extends State<MapOverlay> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 20),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.02),
               child: Container(
                 margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.01),

@@ -83,7 +83,8 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                        left: screenSize.width * 0.12, right: 8),
+                        left: screenSize.width * 0.09,
+                        right: screenSize.width * 0.01),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange),

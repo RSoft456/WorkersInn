@@ -22,7 +22,7 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.orange,
-          title: const Text('Worker Requests'),
+          title: const Text('Customer Requests'),
           automaticallyImplyLeading: false,
           actions: [
             TextButton(
@@ -62,7 +62,7 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
           physics: const BouncingScrollPhysics(),
           itemCount: 8,
           itemBuilder: (context, index) {
-            return const CustomerRequests();
+            return const WorkerRequestList();
           },
         ),
       ),

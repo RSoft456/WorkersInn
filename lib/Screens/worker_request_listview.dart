@@ -20,7 +20,7 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.009),
             child: Row(
               children: [
                 Container(
@@ -105,9 +105,9 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: SizedBox(
-                  width: Screensize.width * 0.3,
+                  width: Screensize.width * 0.34,
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(Screensize.width * 0.001),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange),
