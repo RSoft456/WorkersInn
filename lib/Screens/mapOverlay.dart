@@ -19,13 +19,13 @@ class _MapOverlayState extends State<MapOverlay> {
   Widget build(BuildContext context) {
     InputDecoration textFieldDecoration = InputDecoration(
         prefixIcon: const Icon(Icons.location_on_outlined),
-        label: Text("Destination", style: GoogleFonts.merriweather()),
+        label: Text("Location", style: GoogleFonts.merriweather()),
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20))));
     TextEditingController locationController = TextEditingController();
     return Container(
         margin: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * 0.6,
+          top: MediaQuery.of(context).size.height * 0.5,
         ),
         decoration: const BoxDecoration(
             color: Color.fromARGB(255, 255, 255, 255),
@@ -39,9 +39,19 @@ class _MapOverlayState extends State<MapOverlay> {
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.02),
+              child: Text("Select a service",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: orange,
+                      fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.01),
               child: Container(
                 margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.01),
+                    top: MediaQuery.of(context).size.height * 0.01,
+                    left: MediaQuery.of(context).size.height * 0.06),
                 //color: Colors.amber,
                 height: MediaQuery.of(context).size.height * 0.112,
                 width: MediaQuery.of(context).size.width * 0.78,
@@ -56,7 +66,7 @@ class _MapOverlayState extends State<MapOverlay> {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Image.asset(
-                          "assets/electrician.jpg",
+                          "assets/electrician.png",
                           height: MediaQuery.of(context).size.height * 0.1,
                           width: MediaQuery.of(context).size.height * 0.1,
                         ),
@@ -73,7 +83,7 @@ class _MapOverlayState extends State<MapOverlay> {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Image.asset(
-                          "assets/electrician.jpg",
+                          "assets/cleaner.png",
                           height: MediaQuery.of(context).size.height * 0.1,
                           width: MediaQuery.of(context).size.height * 0.1,
                         ),
@@ -90,7 +100,7 @@ class _MapOverlayState extends State<MapOverlay> {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Image.asset(
-                          "assets/electrician.jpg",
+                          "assets/plumber.png",
                           height: MediaQuery.of(context).size.height * 0.1,
                           width: MediaQuery.of(context).size.height * 0.1,
                         ),

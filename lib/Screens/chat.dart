@@ -32,9 +32,13 @@ class _ChatScreenState extends State<ChatScreen> {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsets.only(top: screenSize.width * 0.01),
+                                EdgeInsets.only(top: screenSize.width * 0.02),
                             child: Container(
-                              padding: EdgeInsets.all(screenSize.width * 0.01),
+                              padding: EdgeInsets.only(
+                                  top: screenSize.width * 0.02,
+                                  bottom: screenSize.width * 0.02,
+                                  left: screenSize.width * 0.04,
+                                  right: screenSize.width * 0.02),
                               width: screenSize.width * 0.7,
                               decoration: const BoxDecoration(
                                 color: Color.fromARGB(119, 252, 239, 165),
@@ -57,12 +61,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsets.only(top: screenSize.width * 0.01),
+                                EdgeInsets.only(top: screenSize.width * 0.02),
                             child: Container(
-                              padding: EdgeInsets.all(screenSize.width * 0.01),
+                              padding: EdgeInsets.only(
+                                  top: screenSize.width * 0.02,
+                                  bottom: screenSize.width * 0.02,
+                                  left: screenSize.width * 0.04,
+                                  right: screenSize.width * 0.02),
                               width: screenSize.width * 0.7,
                               decoration: const BoxDecoration(
-                                color: Color.fromARGB(119, 252, 239, 165),
+                                color: Color.fromARGB(119, 248, 239, 190),
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(20),
                                     bottomRight: Radius.circular(20),

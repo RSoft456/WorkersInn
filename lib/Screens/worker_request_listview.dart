@@ -166,35 +166,23 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                         child: Text("Age: 34"),
                       )),
                   Wrap(
-                    children: const [
+                    children: [
                       Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Chip(
+                        padding: EdgeInsets.all(screen.width * 0.01),
+                        child: const Chip(
                           label: Text("Plumber"),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Chip(
+                        padding: EdgeInsets.all(screen.width * 0.01),
+                        child: const Chip(
                           label: Text("Electrician"),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Chip(
+                        padding: EdgeInsets.all(screen.width * 0.01),
+                        child: const Chip(
                           label: Text("Cleaner"),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Chip(
-                          label: Text("Electrician"),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Chip(
-                          label: Text("Electrician"),
                         ),
                       ),
                     ],

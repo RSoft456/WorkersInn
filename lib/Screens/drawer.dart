@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:workers_inn/RegistrationPages/signin.dart';
 import 'package:workers_inn/workerModule/WorkerRegistration.dart';
 
+import 'package:workers_inn/Screens/home.dart';
+
 class drawer extends StatelessWidget {
   const drawer({super.key});
 
@@ -28,6 +30,15 @@ class drawer extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: ((context) => const WorkerRegistration())),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Customer Mode'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: ((context) => const Home())),
               );
             },
           ),
