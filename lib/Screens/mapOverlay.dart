@@ -14,6 +14,7 @@ class MapOverlay extends StatefulWidget {
 }
 
 class _MapOverlayState extends State<MapOverlay> {
+  String job = "";
   Color cardColor = green;
   @override
   Widget build(BuildContext context) {
@@ -59,6 +60,7 @@ class _MapOverlayState extends State<MapOverlay> {
                   InkWell(
                     onTap: () {
                       selectedJob = 1;
+                      job = "electrician";
                       setState(() {});
                     },
                     child: Card(
@@ -69,6 +71,7 @@ class _MapOverlayState extends State<MapOverlay> {
                           "assets/electrician.png",
                           height: MediaQuery.of(context).size.height * 0.1,
                           width: MediaQuery.of(context).size.height * 0.1,
+                          color: selectedJob == 1 ? Colors.white : null,
                         ),
                       ),
                     ),
@@ -76,6 +79,7 @@ class _MapOverlayState extends State<MapOverlay> {
                   InkWell(
                     onTap: () {
                       selectedJob = 2;
+                      job = "cleaner";
                       setState(() {});
                     },
                     child: Card(
@@ -86,6 +90,7 @@ class _MapOverlayState extends State<MapOverlay> {
                           "assets/cleaner.png",
                           height: MediaQuery.of(context).size.height * 0.1,
                           width: MediaQuery.of(context).size.height * 0.1,
+                          color: selectedJob == 2 ? Colors.white : null,
                         ),
                       ),
                     ),
@@ -93,6 +98,7 @@ class _MapOverlayState extends State<MapOverlay> {
                   InkWell(
                     onTap: () {
                       selectedJob = 3;
+                      job = "plumber";
                       setState(() {});
                     },
                     child: Card(
@@ -103,6 +109,7 @@ class _MapOverlayState extends State<MapOverlay> {
                           "assets/plumber.png",
                           height: MediaQuery.of(context).size.height * 0.1,
                           width: MediaQuery.of(context).size.height * 0.1,
+                          color: selectedJob == 3 ? Colors.white : null,
                         ),
                       ),
                     ),
@@ -110,6 +117,7 @@ class _MapOverlayState extends State<MapOverlay> {
                 ]),
               ),
             ),
+            Text(job),
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: SizedBox(

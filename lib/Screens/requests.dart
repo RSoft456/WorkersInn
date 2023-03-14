@@ -26,30 +26,9 @@ class _RequestsPageState extends State<RequestsPage> {
           actions: [
             TextButton(
                 onPressed: () {
-                  showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (ctx) {
-                        return AlertDialog(
-                          content: const Text("Cancel Request ?"),
-                          actions: [
-                            ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(ctx);
-                                },
-                                child: const Text("no")),
-                            ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(ctx);
-
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  "yes",
-                                )),
-                          ],
-                        );
-                      });
+                  bool popIt =
+                      dialogBox(context, "Cancel Request ?", "yes", "no", true);
+                  if (popIt) Navigator.pop(context);
                 },
                 child: Text(
                   'cancel',

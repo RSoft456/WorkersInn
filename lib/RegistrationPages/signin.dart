@@ -40,7 +40,10 @@ class _SignInState extends State<SignIn> {
         message = "User is disabled";
       } else if (e.code == "user-not-found") {
         message = "User not registered, Sign Up";
+      } else {
+        message = "Some error occured, please try again";
       }
+      Navigator.pop(context);
       showDialog(
           barrierDismissible: false,
           context: context,
@@ -171,6 +174,13 @@ class _SignInState extends State<SignIn> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20))),
                             onPressed: () {
+                              showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (ctx) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  });
                               if (_formKey.currentState!.validate()) {
                                 UserSignIn();
                               }
