@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:workers_inn/Screens/RequestInProcess.dart';
 import 'package:workers_inn/Screens/chat.dart';
+
+import '../variables.dart';
 
 class NegotiationCustomer extends StatefulWidget {
   const NegotiationCustomer({super.key});
@@ -61,21 +63,15 @@ class _NegotiationCustomerState extends State<NegotiationCustomer> {
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const RequestInProgress()));
+                      },
                       child: const Icon(Icons.check_box))
                 ],
               )
             ],
           )),
     );
-  }
-}
-
-openDialPad(String phoneNumber) async {
-  Uri url = Uri(scheme: "tel", path: phoneNumber);
-  if (await canLaunchUrl(url)) {
-    await launchUrl(url);
-  } else {
-    print("Can't open dial pad.");
   }
 }

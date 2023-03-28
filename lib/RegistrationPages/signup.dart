@@ -12,7 +12,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  FocusNode node = FocusNode();
   GlobalKey key = GlobalKey();
   final _formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
@@ -128,13 +127,7 @@ class _SignUpState extends State<SignUp> {
                                 return null;
                               }),
                               controller: userName,
-                              focusNode: node,
                               decoration: InputDecoration(
-                                  labelStyle: TextStyle(
-                                    color: node.hasFocus
-                                        ? Colors.orange
-                                        : Colors.black,
-                                  ),
                                   label: Text(
                                     "Username",
                                     style: GoogleFonts.merriweather(),
