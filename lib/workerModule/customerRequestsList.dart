@@ -13,7 +13,7 @@ class WorkerRequestList extends StatefulWidget {
 class _WorkerRequestListState extends State<WorkerRequestList> {
   @override
   Widget build(BuildContext context) {
-    Size Screensize = MediaQuery.of(context).size;
+    Size screenSize = MediaQuery.of(context).size;
     return Card(
       color: const Color.fromARGB(255, 255, 255, 255),
       elevation: 3,
@@ -28,19 +28,23 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                   height: MediaQuery.of(context).size.height * 0.08,
                   width: MediaQuery.of(context).size.height * 0.08,
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.orange, width: 4),
-                      borderRadius: BorderRadius.circular(50),
-                      image: const DecorationImage(
-                        image: AssetImage("assets/profile.png"),
-                        fit: BoxFit.fill,
-                      )),
+                    border: Border.all(color: Colors.orange, width: 4),
+                    borderRadius: BorderRadius.circular(50),
+                    image: const DecorationImage(
+                      image: AssetImage("assets/profile.png"),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
                 ),
                 SizedBox(
-                  width: Screensize.width * 0.65,
+                  width: screenSize.width * 0.65,
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: EdgeInsets.only(
+                          top: screenSize.width * 0.05,
+                          left: screenSize.width * 0.05,
+                          right: screenSize.width * 0.1),
                       child: Column(
                         children: const [
                           Text(
@@ -94,27 +98,32 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
             ),
           ),
           SizedBox(
-              width: Screensize.width * 0.87,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: SizedBox(
-                  width: Screensize.width * 0.34,
-                  child: Padding(
-                    padding: EdgeInsets.all(Screensize.width * 0.001),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const NegotiationWorker()));
-                        },
-                        child: const Text(
-                          "Accept",
-                          style: TextStyle(fontSize: 18),
-                        )),
+            width: screenSize.width * 0.87,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: SizedBox(
+                width: screenSize.width * 0.34,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: screenSize.width * 0.001,
+                      bottom: screenSize.width * 0.001,
+                      right: screenSize.width * 0.001),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const NegotiationWorker()));
+                    },
+                    child: const Text(
+                      "Accept",
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );

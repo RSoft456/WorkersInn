@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Color orange = const Color.fromARGB(242, 245, 119, 35);
+Color orange = Colors.orange;
 Color white = const Color.fromARGB(241, 255, 255, 255);
 Color green = const Color.fromARGB(240, 8, 164, 44);
 Color grey = const Color.fromARGB(255, 231, 231, 231);
@@ -42,4 +42,11 @@ dialogBox(ctxx, message, positive, negative, popContext) {
           ],
         );
       });
+}
+
+ShowToast(message, ctx) {
+  SnackBar snackBar = SnackBar(
+    content: Text(message),
+  );
+  ScaffoldMessenger.of(ctx).showSnackBar(snackBar);
 }

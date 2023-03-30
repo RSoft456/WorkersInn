@@ -16,7 +16,7 @@ class _WorkerMapOverlayState extends State<WorkerMapOverlay> {
   Widget build(BuildContext context) {
     InputDecoration textFieldDecoration = InputDecoration(
         prefixIcon: const Icon(Icons.location_on_outlined),
-        label: Text("Destination", style: GoogleFonts.merriweather()),
+        label: Text("Location", style: GoogleFonts.merriweather()),
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20))));
     TextEditingController locationController = TextEditingController();

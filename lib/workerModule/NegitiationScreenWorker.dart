@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:workers_inn/Screens/chat.dart';
+import 'package:workers_inn/workerModule/RequestInProcessWorker.dart';
+
+import '../variables.dart';
 
 class NegotiationWorker extends StatefulWidget {
   const NegotiationWorker({super.key});
@@ -10,6 +13,8 @@ class NegotiationWorker extends StatefulWidget {
 }
 
 class _NegotiationWorkerState extends State<NegotiationWorker> {
+  TextEditingController price = TextEditingController();
+  int finalPrice = 0;
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -50,8 +55,9 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                                 context: context,
                                 builder: (ctx) {
                                   return AlertDialog(
-                                    content: const TextField(
-                                      decoration: InputDecoration(
+                                    content: TextField(
+                                      controller: price,
+                                      decoration: const InputDecoration(
                                           hintText: "Enter Price",
                                           label: Text("Enter Price"),
                                           border: OutlineInputBorder(
@@ -63,22 +69,23 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                                           onPressed: () {
                                             Navigator.pop(ctx);
                                           },
-                                          child: const Text("no")),
+                                          child: const Text("cancel")),
                                       ElevatedButton(
                                           onPressed: () {
                                             Navigator.pop(ctx);
-
-                                            Navigator.pop(context);
-                                            Navigator.pop(context);
+                                            finalPrice = int.parse(price.text);
+                                            setState(() {});
                                           },
                                           child: const Text(
-                                            "yes",
+                                            "ok",
                                           )),
                                     ],
                                   );
                                 });
                           },
-                          child: const Text("Enter Price")),
+                          child: finalPrice == 0
+                              ? const Text("Enter Price")
+                              : Text("Rs.$finalPrice")),
                     ),
                   ),
                   Padding(
@@ -94,7 +101,36 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (finalPrice != 0) {
+                          ShowToast("Request sent !!", context);
+                          Future.delayed(const Duration(seconds: 5), () {
+                            showDialog(
+                              context: context,
+                              builder: ((context) {
+                                return AlertDialog(
+                                  content: const Text("Request accepted !!"),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const RequestInProcessWorker(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text("Ok")),
+                                  ],
+                                );
+                              }),
+                            );
+                          });
+                        } else {
+                          ShowToast("Enter Price !!", context);
+                        }
+                      },
                       child: const Icon(Icons.check_box))
                 ],
               )
