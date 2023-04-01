@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workers_inn/RegistrationPages/signin.dart';
+import 'package:workers_inn/Screens/CustomerSupport.dart';
 import 'package:workers_inn/Screens/history.dart';
 import 'package:workers_inn/workerModule/WorkerRegistration.dart';
 
@@ -49,6 +50,16 @@ class drawer extends StatelessWidget {
               Navigator.pop(context);
               Navigator.of(context).push(
                 MaterialPageRoute(builder: ((context) => const History())),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Support'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: ((context) => const CustomerSupport())),
               );
             },
           ),

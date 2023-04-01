@@ -10,6 +10,7 @@ class WorkerRequestList extends StatefulWidget {
 }
 
 class _WorkerRequestListState extends State<WorkerRequestList> {
+  int totalOrders = 0;
   @override
   Widget build(BuildContext context) {
     Size Screensize = MediaQuery.of(context).size;
@@ -39,18 +40,28 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: EdgeInsets.only(
+                          top: Screensize.width * 0.03,
+                          right: Screensize.width * 0.03,
+                          left: Screensize.width * 0.03),
                       child: Column(
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             "John Doe",
                             style: TextStyle(fontSize: 22),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.only(top: 8.0),
                             child: Text(
                               "Rating: 4.5",
                               style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              "Orders: $totalOrders",
+                              style: const TextStyle(fontSize: 16),
                             ),
                           )
                         ],
@@ -107,7 +118,10 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                 child: SizedBox(
                   width: Screensize.width * 0.34,
                   child: Padding(
-                    padding: EdgeInsets.all(Screensize.width * 0.001),
+                    padding: EdgeInsets.only(
+                        left: Screensize.width * 0.001,
+                        bottom: Screensize.width * 0.001,
+                        right: Screensize.width * 0.001),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange),

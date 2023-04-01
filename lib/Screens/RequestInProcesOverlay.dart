@@ -21,17 +21,20 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
       showDialog(
         context: context,
         builder: ((context) {
-          return AlertDialog(
-            content: const Text("Request completed !!"),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => const Home()),
-                        (route) => false);
-                  },
-                  child: const Text("Ok")),
-            ],
+          return WillPopScope(
+            onWillPop: () async {
+              return false;
+            },
+            child: AlertDialog(
+              content: const Text("Request completed !!"),
+              actions: [
+                ElevatedButton(
+                    onPressed: () {
+                      Showrating(context);
+                    },
+                    child: const Text("Ok")),
+              ],
+            ),
           );
         }),
       );
@@ -131,7 +134,7 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                      left: MediaQuery.of(context).size.width * 0.173,
+                      left: MediaQuery.of(context).size.width * 0.14,
                       top: MediaQuery.of(context).size.height * 0.01),
                   child: Row(
                     children: [
@@ -148,7 +151,7 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.02),
+                            left: MediaQuery.of(context).size.width * 0.04),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -159,13 +162,30 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
                                   padding: EdgeInsets.only(
                                       top: MediaQuery.of(context).size.width *
                                           0.02),
-                                  child: const Text("Call John Doe "),
+                                  child: const Text("John Doe "),
                                 ),
-                                InkWell(
-                                  onTap: () => openDialPad("03456478564"),
-                                  child: const Icon(
-                                    Icons.call,
-                                    color: Colors.orange,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.08),
+                                  child: InkWell(
+                                    onTap: () => openDialPad("03456478564"),
+                                    child: const Icon(
+                                      Icons.call,
+                                      color: Colors.orange,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.03),
+                                  child: InkWell(
+                                    onTap: () {},
+                                    child: const Icon(
+                                      Icons.message,
+                                      color: Colors.orange,
+                                    ),
                                   ),
                                 )
                               ],
@@ -272,5 +292,160 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
         ),
       ),
     );
+  }
+
+  Showrating(ctx) {
+    int rating = 0;
+    bool visibility = false;
+    IconData star1 = Icons.star_border_rounded;
+    IconData star2 = Icons.star_border_rounded;
+    IconData star3 = Icons.star_border_rounded;
+    IconData star4 = Icons.star_border_rounded;
+    IconData star5 = Icons.star_border_rounded;
+    IconData starFilled = Icons.star_rounded;
+    IconData starHollow = Icons.star_border_rounded;
+    showDialog(
+        barrierDismissible: false,
+        context: ctx,
+        builder: (ctxx) {
+          return WillPopScope(
+            onWillPop: () async {
+              return false;
+            },
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return AlertDialog(
+                  title: const Text("Rate Worker !"),
+                  titleTextStyle: TextStyle(
+                      color: orange, fontSize: 19, fontWeight: FontWeight.bold),
+                  titlePadding: EdgeInsets.only(
+                      left: MediaQuery.of(ctx).size.width * 0.23,
+                      top: MediaQuery.of(ctx).size.width * 0.03),
+                  content: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          visibility = true;
+                          rating = 1;
+                          star1 = starFilled;
+                          star2 = starHollow;
+                          star3 = starHollow;
+                          star4 = starHollow;
+                          star5 = starHollow;
+                          setState(() {});
+                        },
+                        child: Icon(
+                          star1,
+                          size: 45,
+                          color: const Color.fromARGB(255, 255, 222, 59),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          visibility = true;
+                          rating = 2;
+                          star1 = starFilled;
+                          star2 = starFilled;
+                          star3 = starHollow;
+                          star4 = starHollow;
+                          star5 = starHollow;
+                          setState(() {});
+                        },
+                        child: Icon(
+                          star2,
+                          size: 45,
+                          color: const Color.fromARGB(255, 255, 222, 59),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          visibility = true;
+                          rating = 3;
+                          star1 = starFilled;
+                          star2 = starFilled;
+                          star3 = starFilled;
+                          star4 = starHollow;
+                          star5 = starHollow;
+                          setState(() {});
+                        },
+                        child: Icon(
+                          star3,
+                          size: 45,
+                          color: const Color.fromARGB(255, 255, 222, 59),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          visibility = true;
+                          rating = 4;
+                          star1 = starFilled;
+                          star2 = starFilled;
+                          star3 = starFilled;
+                          star4 = starFilled;
+                          star5 = starHollow;
+                          setState(() {});
+                        },
+                        child: Icon(
+                          star4,
+                          size: 45,
+                          color: const Color.fromARGB(255, 255, 222, 59),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          visibility = true;
+                          rating = 5;
+                          star1 = starFilled;
+                          star2 = starFilled;
+                          star3 = starFilled;
+                          star4 = starFilled;
+                          star5 = starFilled;
+                          setState(() {});
+                        },
+                        child: Icon(
+                          star5,
+                          size: 45,
+                          color: const Color.fromARGB(255, 255, 222, 59),
+                        ),
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(ctxx);
+
+                          Navigator.of(ctxx).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => const Home()),
+                              (route) => false);
+                        },
+                        child: Text(
+                          "Later",
+                          style: TextStyle(color: white),
+                        )),
+                    ElevatedButton(
+                      onPressed: visibility
+                          ? () {
+                              Navigator.pop(ctxx);
+                              Navigator.of(ctxx).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const Home()),
+                                  (route) => false);
+                            }
+                          : null,
+                      child: Text(
+                        "Submit",
+                        style: TextStyle(color: white),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        });
   }
 }

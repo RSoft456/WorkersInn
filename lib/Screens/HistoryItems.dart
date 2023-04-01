@@ -37,20 +37,33 @@ class _HistoryListState extends State<HistoryList> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: EdgeInsets.all(
+                          MediaQuery.of(context).size.width * 0.04),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           Text(
                             "John Doe",
-                            style: TextStyle(fontSize: 22),
+                            style: TextStyle(fontSize: 18),
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 8.0),
                             child: Text(
-                              "Rating: 4.5",
+                              "Service: Plumber",
                               style: TextStyle(fontSize: 16),
                             ),
-                          )
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: SelectableText.rich(
+                              TextSpan(
+                                style: TextStyle(fontSize: 16),
+                                children: [
+                                  TextSpan(text: "Contact: 03092346570"),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

@@ -188,6 +188,7 @@ class _MapOverlayState extends State<MapOverlay> {
                               );
                             });
                       } else {
+                        selectedJob = 0;
                         Navigator.push(
                             context,
                             MaterialPageRoute(
