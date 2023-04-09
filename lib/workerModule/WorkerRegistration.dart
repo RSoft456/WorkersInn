@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:workers_inn/variables.dart';
 import 'package:workers_inn/workerModule/verification.dart';
 
 class WorkerRegistration extends StatefulWidget {
@@ -27,7 +28,7 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
             SizedBox(
               //height: MediaQuery.of(context).size.height * 0.183,
               child: Image.asset(
-                "assets/banner.jpg",
+                "assets/banner2.png",
                 height: MediaQuery.of(context).size.height * 0.3,
                 fit: BoxFit.fill,
               ),
@@ -249,6 +250,8 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               child: CheckboxListTile(
                                 //checkbox positioned at right
+                                activeColor: orange,
+
                                 value: plumber,
                                 onChanged: (bool? value) {
                                   setState(() {
@@ -262,6 +265,7 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               child: CheckboxListTile(
                                 //checkbox positioned at right
+                                activeColor: orange,
                                 value: cleaner,
                                 onChanged: (bool? value) {
                                   setState(() {
@@ -275,6 +279,8 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               child: CheckboxListTile(
                                 //checkbox positioned at right
+                                activeColor: orange,
+
                                 value: electrician,
                                 onChanged: (bool? value) {
                                   setState(() {
@@ -289,12 +295,22 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.03,
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const Verification()));
-                          },
-                          child: const Text('submit'),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: orange,
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.03)),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const Verification()));
+                            },
+                            child: const Text('submit'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03,
                         ),
                       ],
                     ),

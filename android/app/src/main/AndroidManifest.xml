@@ -6,8 +6,10 @@
         android:label="workers_inn"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyDoIsXPLr559ILNxAbtyUPKQk96aHgMzBI"/> -->
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyDoIsXPLr559ILNxAbtyUPKQk96aHgMzBI"/>
+               android:value="AIzaSyB-spPtR-mDIT4zxvwi1UsuK8ypZttEQrQ"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

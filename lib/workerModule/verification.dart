@@ -23,7 +23,7 @@ class _VerificationState extends State<Verification> {
             SizedBox(
               //height: MediaQuery.of(context).size.height * 0.183,
               child: Image.asset(
-                "assets/banner.jpg",
+                "assets/banner2.png",
                 height: MediaQuery.of(context).size.height * 0.4,
                 fit: BoxFit.fill,
               ),

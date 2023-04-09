@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -69,15 +70,19 @@ class PlaceApiProvider {
   PlaceApiProvider(this.sessionToken);
 
   final sessionToken;
-  final apiKey = 'AIzaSyB-GCGoTnknz_lv8-I_zeNr0llIFS123i4';
+  //final apiKey = 'AIzaSyB-GCGoTnknz_lv8-I_zeNr0llIFS123i4';
+
+  final API_KEY = 'AIzaSyB-spPtR-mDIT4zxvwi1UsuK8ypZttEQrQ';
 
   Future<List<Suggestion>> fetchSuggestions(String input, String lang) async {
     final request =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=address&language=$lang&components=country:pk&key=$apiKey&sessiontoken=$sessionToken';
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=address&language=$lang&components=country:pk&key=$API_KEY&sessiontoken=$sessionToken';
     final response = await client.get(Uri.parse(request));
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
+      log("hello");
+      log(result['status']);
       if (result['status'] == 'OK') {
         // compose suggestions in a list
         return result['predictions']
@@ -89,18 +94,21 @@ class PlaceApiProvider {
       }
       throw Exception(result['error_message']);
     } else {
+      //log("hiiiiiiiiiiiiiii");
       throw Exception('Failed to fetch suggestion');
     }
   }
 
   Future getPlaceDetailFromId(String placeId) async {
     final request =
-        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=geometry&key=$apiKey&sessiontoken=$sessionToken';
+        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=geometry&key=$API_KEY&sessiontoken=$sessionToken';
     final response = await client.get(Uri.parse(request));
-    print(request);
+    log(request);
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
+      log("hello");
+      log(result['status']);
       if (result['status'] == 'OK') {
         // print("result: ${result['result']['geometry']['location']}");
 

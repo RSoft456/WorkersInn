@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:workers_inn/Screens/WCchats.dart';
 import 'package:workers_inn/Screens/home.dart';
 
 import '../variables.dart';
@@ -29,10 +30,14 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
               content: const Text("Request completed !!"),
               actions: [
                 ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: orange),
                     onPressed: () {
                       Showrating(context);
                     },
-                    child: const Text("Ok")),
+                    child: Text(
+                      "Ok",
+                      style: TextStyle(color: white),
+                    )),
               ],
             ),
           );
@@ -81,49 +86,53 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
                   top: MediaQuery.of(context).size.height * 0.01),
               child: Container(
                 margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.01,
-                    left: MediaQuery.of(context).size.height * 0.06),
+                  top: MediaQuery.of(context).size.height * 0.01,
+                ),
+
                 //color: Colors.amber,
                 height: MediaQuery.of(context).size.height * 0.112,
                 width: MediaQuery.of(context).size.width * 0.78,
-                child: ListView(scrollDirection: Axis.horizontal, children: [
-                  Card(
-                    color: selectedJob == 1 ? green : grey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Image.asset(
-                        "assets/electrician.png",
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        width: MediaQuery.of(context).size.height * 0.1,
-                        color: selectedJob == 1 ? Colors.white : null,
+                child: Row(
+                    //scrollDirection: Axis.horizontal,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Card(
+                        color: selectedJob == 1 ? green : grey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Image.asset(
+                            "assets/electrician.png",
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.height * 0.1,
+                            color: selectedJob == 1 ? Colors.white : null,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Card(
-                    color: selectedJob == 2 ? green : grey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Image.asset(
-                        "assets/cleaner.png",
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        width: MediaQuery.of(context).size.height * 0.1,
-                        color: selectedJob == 2 ? Colors.white : null,
+                      Card(
+                        color: selectedJob == 2 ? green : grey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Image.asset(
+                            "assets/cleaner.png",
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.height * 0.1,
+                            color: selectedJob == 2 ? Colors.white : null,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Card(
-                    color: selectedJob == 3 ? green : grey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Image.asset(
-                        "assets/plumber.png",
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        width: MediaQuery.of(context).size.height * 0.1,
-                        color: selectedJob == 3 ? Colors.white : null,
+                      Card(
+                        color: selectedJob == 3 ? green : grey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Image.asset(
+                            "assets/plumber.png",
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.height * 0.1,
+                            color: selectedJob == 3 ? Colors.white : null,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ]),
+                    ]),
               ),
             ),
             Padding(
@@ -181,7 +190,13 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
                                       left: MediaQuery.of(context).size.width *
                                           0.03),
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const WCchats()),
+                                      );
+                                    },
                                     child: const Icon(
                                       Icons.message,
                                       color: Colors.orange,
@@ -414,6 +429,8 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
                   ),
                   actions: [
                     ElevatedButton(
+                        style:
+                            ElevatedButton.styleFrom(backgroundColor: orange),
                         onPressed: () {
                           Navigator.pop(ctxx);
 
@@ -427,6 +444,7 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
                           style: TextStyle(color: white),
                         )),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: orange),
                       onPressed: visibility
                           ? () {
                               Navigator.pop(ctxx);

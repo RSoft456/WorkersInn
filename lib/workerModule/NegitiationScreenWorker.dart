@@ -57,20 +57,31 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                                   return AlertDialog(
                                     content: TextField(
                                       controller: price,
-                                      decoration: const InputDecoration(
+                                      decoration: InputDecoration(
+                                          focusColor: orange,
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: orange),
+                                          ),
                                           hintText: "Enter Price",
-                                          label: Text("Enter Price"),
-                                          border: OutlineInputBorder(
+                                          label: const Text("Enter Price"),
+                                          border: const OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(20)))),
                                     ),
                                     actions: [
                                       ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: orange,
+                                          ),
                                           onPressed: () {
                                             Navigator.pop(ctx);
                                           },
                                           child: const Text("cancel")),
                                       ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: orange,
+                                          ),
                                           onPressed: () {
                                             Navigator.pop(ctx);
                                             finalPrice = int.parse(price.text);
@@ -112,6 +123,8 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                                   content: const Text("Request accepted !!"),
                                   actions: [
                                     ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: orange),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).push(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
@@ -26,7 +28,7 @@ class _MapOverlayState extends State<MapOverlay> {
     TextEditingController locationController = TextEditingController();
     return Container(
         margin: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * 0.5,
+          top: MediaQuery.of(context).size.height * 0.55,
         ),
         decoration: const BoxDecoration(
             color: Color.fromARGB(255, 255, 255, 255),
@@ -51,120 +53,112 @@ class _MapOverlayState extends State<MapOverlay> {
                   top: MediaQuery.of(context).size.height * 0.01),
               child: Container(
                 margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.01,
-                    left: MediaQuery.of(context).size.height * 0.06),
+                  top: MediaQuery.of(context).size.height * 0.01,
+                ),
                 //color: Colors.amber,
                 height: MediaQuery.of(context).size.height * 0.112,
-                width: MediaQuery.of(context).size.width * 0.78,
-                child: ListView(scrollDirection: Axis.horizontal, children: [
-                  InkWell(
-                    onTap: () {
-                      selectedJob = 1;
-                      job = "electrician";
-                      setState(() {});
-                    },
-                    child: Card(
-                      color: selectedJob == 1 ? green : grey,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Image.asset(
-                          "assets/electrician.png",
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          width: MediaQuery.of(context).size.height * 0.1,
-                          color: selectedJob == 1 ? Colors.white : null,
+                width: MediaQuery.of(context).size.width * 0.79,
+                child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                    //scrollDirection: Axis.horizontal,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          selectedJob = 1;
+                          job = "electrician";
+                          setState(() {});
+                        },
+                        child: Card(
+                          color: selectedJob == 1 ? green : grey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Image.asset(
+                              "assets/electrician.png",
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.height * 0.1,
+                              color: selectedJob == 1 ? Colors.white : null,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      selectedJob = 2;
-                      job = "cleaner";
-                      setState(() {});
-                    },
-                    child: Card(
-                      color: selectedJob == 2 ? green : grey,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Image.asset(
-                          "assets/cleaner.png",
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          width: MediaQuery.of(context).size.height * 0.1,
-                          color: selectedJob == 2 ? Colors.white : null,
+                      InkWell(
+                        onTap: () {
+                          selectedJob = 2;
+                          job = "cleaner";
+                          setState(() {});
+                        },
+                        child: Card(
+                          color: selectedJob == 2 ? green : grey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: Image.asset(
+                              "assets/cleaner.png",
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.height * 0.1,
+                              color: selectedJob == 2 ? Colors.white : null,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      selectedJob = 3;
-                      job = "plumber";
-                      setState(() {});
-                    },
-                    child: Card(
-                      color: selectedJob == 3 ? green : grey,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Image.asset(
-                          "assets/plumber.png",
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          width: MediaQuery.of(context).size.height * 0.1,
-                          color: selectedJob == 3 ? Colors.white : null,
+                      InkWell(
+                        onTap: () {
+                          selectedJob = 3;
+                          job = "plumber";
+                          setState(() {});
+                        },
+                        child: Card(
+                          color: selectedJob == 3 ? green : grey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: Image.asset(
+                              "assets/plumber.png",
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.height * 0.1,
+                              color: selectedJob == 3 ? Colors.white : null,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ]),
+                    ]),
               ),
             ),
-            Text(job),
             Padding(
-              padding: const EdgeInsets.only(top: 20),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.01),
+              child: Text(job, style: const TextStyle(fontSize: 17)),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.width * 0.02),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
-                    onTap: () async {
-                      final sessionToken = const Uuid().v4();
-                      Suggestion? result = await showSearch(
-                        context: context,
-                        delegate: AddressSearch(sessionToken: sessionToken),
-                      );
-                      var latlong = await PlaceApiProvider(sessionToken)
-                          .getPlaceDetailFromId(result!.placeId);
-                      //print(latlong);
-                      // showModalBottomSheet(
-                      //     shape: const RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.only(
-                      //             topLeft: Radius.circular(45),
-                      //             topRight: Radius.circular(45))),
-                      //     isScrollControlled: true,
-                      //     context: context,
-                      //     builder: (context) {
-                      //       return Wrap(
-                      //         children: [
-                      //           SizedBox(
-                      //             height:
-                      //                 MediaQuery.of(context).size.height * 0.9,
-                      //             child:
-                      //                 Container(), //const locationSearcher(),
-                      //           )
-                      //         ],
-                      //       );
-                      //     });
-                    },
-                    keyboardType: TextInputType.none,
-                    controller: locationController,
-                    decoration: textFieldDecoration),
+                  onTap: () async {
+                    final sessionToken = const Uuid().v4();
+                    Suggestion? result = await showSearch(
+                      context: context,
+                      delegate: AddressSearch(sessionToken: sessionToken),
+                    );
+                    var latlong = await PlaceApiProvider(sessionToken)
+                        .getPlaceDetailFromId(result!.placeId);
+                    var latlongg = await PlaceApiProvider(sessionToken)
+                        .getPlaceDetailFromId(result.description);
+                    //int l = result.description.length;
+                    log("hiiiii $latlong");
+                  },
+                  keyboardType: TextInputType.none,
+                  controller: locationController,
+                  decoration: textFieldDecoration,
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.03),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: ElevatedButton(
                     style: ButtonStyle(
-                        padding:
-                            MaterialStateProperty.all(const EdgeInsets.all(25)),
+                        padding: MaterialStateProperty.all(EdgeInsets.all(
+                            MediaQuery.of(context).size.width * 0.07)),
                         shape: MaterialStateProperty.all(
                             const RoundedRectangleBorder(
                                 borderRadius:
@@ -180,10 +174,15 @@ class _MapOverlayState extends State<MapOverlay> {
                                 content: const Text("please select a job"),
                                 actions: [
                                   ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: orange),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: const Text("ok")),
+                                      child: Text(
+                                        "ok",
+                                        style: TextStyle(color: white),
+                                      )),
                                 ],
                               );
                             });
@@ -206,3 +205,23 @@ class _MapOverlayState extends State<MapOverlay> {
         ));
   }
 }
+
+// showModalBottomSheet(
+//     shape: const RoundedRectangleBorder(
+//         borderRadius: BorderRadius.only(
+//             topLeft: Radius.circular(45),
+//             topRight: Radius.circular(45))),
+//     isScrollControlled: true,
+//     context: context,
+//     builder: (context) {
+//       return Wrap(
+//         children: [
+//           SizedBox(
+//             height:
+//                 MediaQuery.of(context).size.height * 0.9,
+//             child:
+//                 Container(), //const locationSearcher(),
+//           )
+//         ],
+//       );
+//     });

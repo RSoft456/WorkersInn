@@ -46,6 +46,7 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                           left: screenSize.width * 0.05,
                           right: screenSize.width * 0.1),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           Text(
                             "John Doe",

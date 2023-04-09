@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Color orange = Colors.orange;
+
 Color white = const Color.fromARGB(241, 255, 255, 255);
 Color green = const Color.fromARGB(240, 8, 164, 44);
 Color grey = const Color.fromARGB(255, 231, 231, 231);
@@ -25,11 +26,17 @@ dialogBox(ctxx, message, positive, negative, popContext) {
           content: Text(message),
           actions: [
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: orange,
+                ),
                 onPressed: () {
                   Navigator.pop(ctx);
                 },
-                child: Text(negative)),
+                child: Text(negative, style: TextStyle(color: white))),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: orange,
+                ),
                 onPressed: () {
                   Navigator.pop(ctx);
                   if (popContext) {
@@ -38,6 +45,7 @@ dialogBox(ctxx, message, positive, negative, popContext) {
                 },
                 child: Text(
                   positive,
+                  style: TextStyle(color: white),
                 )),
           ],
         );

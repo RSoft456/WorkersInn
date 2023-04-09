@@ -75,7 +75,7 @@ class _SignInState extends State<SignIn> {
             SizedBox(
               //height: MediaQuery.of(context).size.height * 0.183,
               child: Image.asset(
-                "assets/banner.jpg",
+                "assets/banner2.png",
                 height: MediaQuery.of(context).size.height * 0.3,
                 fit: BoxFit.fill,
               ),
@@ -103,7 +103,7 @@ class _SignInState extends State<SignIn> {
                           "Sign In",
                           style: GoogleFonts.merriweather(
                               fontSize: 25,
-                              color: Colors.orange,
+                              color: orange,
                               fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
@@ -169,8 +169,7 @@ class _SignInState extends State<SignIn> {
                             style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.only(
                                     left: 20, right: 20, top: 10, bottom: 10),
-                                backgroundColor:
-                                    const Color.fromARGB(242, 245, 119, 35),
+                                backgroundColor: orange,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20))),
                             onPressed: () {

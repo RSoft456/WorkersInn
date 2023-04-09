@@ -83,7 +83,7 @@ class _SignUpState extends State<SignUp> {
             SizedBox(
               //height: MediaQuery.of(context).size.height * 0.183,
               child: Image.asset(
-                "assets/banner.jpg",
+                "assets/banner2.png",
                 height: MediaQuery.of(context).size.height * 0.3,
                 fit: BoxFit.fill,
               ),
@@ -111,7 +111,7 @@ class _SignUpState extends State<SignUp> {
                           "Sign Up",
                           style: GoogleFonts.merriweather(
                               fontSize: 25,
-                              color: Colors.orange,
+                              color: orange,
                               fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
@@ -132,10 +132,9 @@ class _SignUpState extends State<SignUp> {
                                     "Username",
                                     style: GoogleFonts.merriweather(),
                                   ),
-                                  focusedBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.orange),
-                                      borderRadius: BorderRadius.all(
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: orange),
+                                      borderRadius: const BorderRadius.all(
                                           Radius.circular(20))),
                                   border: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
@@ -213,8 +212,7 @@ class _SignUpState extends State<SignUp> {
                             style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.only(
                                     left: 20, right: 20, top: 10, bottom: 10),
-                                backgroundColor:
-                                    const Color.fromARGB(242, 245, 119, 35),
+                                backgroundColor: orange,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20))),
                             onPressed: () {

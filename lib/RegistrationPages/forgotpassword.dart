@@ -44,7 +44,7 @@ class _FrogotPasswordState extends State<FrogotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(242, 245, 119, 35),
+      backgroundColor: orange,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -126,8 +126,7 @@ class _FrogotPasswordState extends State<FrogotPassword> {
                           style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 10, bottom: 10),
-                              backgroundColor:
-                                  const Color.fromARGB(242, 245, 119, 35),
+                              backgroundColor: orange,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20))),
                           onPressed: () {
