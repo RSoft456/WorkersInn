@@ -72,7 +72,7 @@ class PlaceApiProvider {
   final sessionToken;
   //final apiKey = 'AIzaSyB-GCGoTnknz_lv8-I_zeNr0llIFS123i4';
 
-  final API_KEY = 'AIzaSyB-spPtR-mDIT4zxvwi1UsuK8ypZttEQrQ';
+  final API_KEY = 'AIzaSyBVud70L3FrcpHqGFyRxBwsJJX8hoOjsW4';
 
   Future<List<Suggestion>> fetchSuggestions(String input, String lang) async {
     final request =
@@ -100,6 +100,7 @@ class PlaceApiProvider {
   }
 
   Future getPlaceDetailFromId(String placeId) async {
+    log("getPLaceDetailsFromID");
     final request =
         'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=geometry&key=$API_KEY&sessiontoken=$sessionToken';
     final response = await client.get(Uri.parse(request));
@@ -114,7 +115,6 @@ class PlaceApiProvider {
 
         return result['result']['geometry']['location'];
       }
-      throw Exception(result['error_message']);
     } else {
       throw Exception('Failed to fetch suggestion');
     }

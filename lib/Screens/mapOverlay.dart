@@ -138,8 +138,13 @@ class _MapOverlayState extends State<MapOverlay> {
                       context: context,
                       delegate: AddressSearch(sessionToken: sessionToken),
                     );
+                    log("hhhhhhh");
+                    if (result == null) {
+                      log("null result");
+                      return;
+                    }
                     var latlong = await PlaceApiProvider(sessionToken)
-                        .getPlaceDetailFromId(result!.placeId);
+                        .getPlaceDetailFromId(result.placeId);
                     var latlongg = await PlaceApiProvider(sessionToken)
                         .getPlaceDetailFromId(result.description);
                     //int l = result.description.length;

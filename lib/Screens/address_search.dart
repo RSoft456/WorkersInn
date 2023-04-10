@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:workers_inn/Screens/place_service.dart';
 
@@ -28,7 +30,6 @@ class AddressSearch extends SearchDelegate<Suggestion> {
       tooltip: 'Back',
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
-        Navigator.of(context).pop();
         //close(context, Suggestion("", ""));
       },
     );
@@ -57,7 +58,9 @@ class AddressSearch extends SearchDelegate<Suggestion> {
                       itemBuilder: (context, index) => ListTile(
                         title: Text(snapshot.data![index].description),
                         onTap: () {
-                          //close(context, snapshot.data![index]);
+                          log("hello: ${snapshot.data![index]}");
+                          close(context, snapshot.data![index]);
+                          log("after");
                         },
                       ),
                       itemCount: snapshot.data!.length,

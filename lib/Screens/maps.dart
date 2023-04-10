@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MapSample extends StatefulWidget {
   const MapSample({Key? key}) : super(key: key);
@@ -24,6 +26,19 @@ class MapSampleState extends State<MapSample> {
       target: LatLng(37.43296265331129, -122.08832357078792),
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
+
+  @override
+  void initState() {
+    requestPermission();
+    super.initState();
+  }
+
+  requestPermission() async {
+    log("requesting permission");
+    final permission = await [
+      Permission.location,
+    ].request();
+  }
 
   @override
   Widget build(BuildContext context) {
