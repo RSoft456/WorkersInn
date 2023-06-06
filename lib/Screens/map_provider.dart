@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -12,8 +11,8 @@ class AppMap with ChangeNotifier {
   createMap() {}
   void addMarker(Marker m) {
     markers[m.markerId.value] = m;
-    log("toadd: ${m.markerId.value}");
-    log("markers: ${markers.entries}");
+    // log("toadd: ${m.markerId.value}");
+    // log("markers: ${markers.entries}");
     notifyListeners();
   }
 
