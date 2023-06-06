@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:workers_inn/RegistrationPages/forgotpassword.dart';
 import 'package:workers_inn/RegistrationPages/signup.dart';
 import 'package:workers_inn/Screens/home.dart';
@@ -60,6 +62,34 @@ class _SignInState extends State<SignIn> {
             );
           });
     }
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  void loadingIndicator(BuildContext ctx) {
+    showDialog(
+        context: ctx,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
   }
 
   @override
@@ -233,7 +263,53 @@ class _SignInState extends State<SignIn> {
                               // shape: RoundedRectangleBorder(
                               //     borderRadius: BorderRadius.circular(20))
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              loadingIndicator(context);
+                              await signInWithGoogle().then((value) {
+                                Navigator.of(context).pop();
+                                log("${value.user!.displayName}");
+                                log("length: ${value.user!.providerData.length}");
+                                try {
+                                  FirebaseFirestore.instance
+                                      .collection("Customers")
+                                      .doc(value.user!.email)
+                                      .set({
+                                    "uid": value.user?.uid,
+                                    "email": value.user?.email,
+                                    "displayName": value.user?.displayName,
+                                  }).then(
+                                    (value) {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                          builder: (context) => const Home(),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    },
+                                  );
+                                } on FirebaseException catch (e) {
+                                  log("${e.code} ${e.message}");
+                                  Navigator.of(context).pop();
+                                  showDialog(
+                                      context: context,
+                                      builder: (ctx) {
+                                        return AlertDialog(
+                                          title: const Text("Error"),
+                                          content: const Text(
+                                              "Play Try Again Later"),
+                                          actions: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("OK"),
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                }
+                              });
+                            },
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: Row(

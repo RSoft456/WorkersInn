@@ -70,9 +70,9 @@ class PlaceApiProvider {
   PlaceApiProvider(this.sessionToken);
 
   final sessionToken;
-  //final apiKey = 'AIzaSyB-GCGoTnknz_lv8-I_zeNr0llIFS123i4';
+  final API_KEY = 'AIzaSyB-GCGoTnknz_lv8-I_zeNr0llIFS123i4';
 
-  final API_KEY = 'AIzaSyBVud70L3FrcpHqGFyRxBwsJJX8hoOjsW4';
+  // final API_KEY = 'AIzaSyBVud70L3FrcpHqGFyRxBwsJJX8hoOjsW4';
 
   Future<List<Suggestion>> fetchSuggestions(String input, String lang) async {
     final request =

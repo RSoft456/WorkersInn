@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:workers_inn/Screens/drawer.dart';
 import 'package:workers_inn/Screens/mapOverlay.dart';
+import 'package:workers_inn/Screens/map_provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -55,15 +57,33 @@ class MainScreenState extends State<MainScreen> {
         key: scaffoldState,
         body: Stack(
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.8,
-              child: GoogleMap(
-                mapType: MapType.normal,
-                initialCameraPosition: _kGooglePlex,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                },
-              ),
+            GoogleMap(
+              scrollGesturesEnabled: true,
+              zoomControlsEnabled: false,
+              mapType: MapType.normal,
+              initialCameraPosition: _kGooglePlex,
+              onMapCreated: (GoogleMapController controller) {
+                //if (context.read<AppMap>().controller.isCompleted) return;
+                context.read<AppMap>().controller.complete(controller);
+                log("map created");
+
+                // _controller.complete(controller);
+              },
+              onTap: (argument) {
+                final marker = Marker(
+                  markerId: const MarkerId("current"),
+                  infoWindow: const InfoWindow(
+                    title: "Pickup Location",
+                  ),
+                  position: LatLng(argument.latitude, argument.longitude),
+                );
+                // if (!mounted) {
+                //   log("not Mounted");
+                //   return;
+                // }
+                context.read<AppMap>().addMarker(marker);
+              },
+              markers: context.read<AppMap>().markers.values.toSet(),
             ),
             const MapOverlay(),
           ],

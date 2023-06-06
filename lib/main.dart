@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:workers_inn/Screens/chats_class_provider.dart';
+import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/firebase_options.dart';
 
 import 'RegistrationPages/signin.dart';
@@ -19,6 +20,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AllChats()),
+        ChangeNotifierProvider(create: (_) => AppMap()),
       ],
       child: MyApp(),
     ),

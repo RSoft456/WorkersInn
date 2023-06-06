@@ -2,8 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:workers_inn/Screens/address_search.dart';
+import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/Screens/place_service.dart';
 import 'package:workers_inn/Screens/requests.dart';
 import 'package:workers_inn/variables.dart';
@@ -145,10 +148,27 @@ class _MapOverlayState extends State<MapOverlay> {
                     }
                     var latlong = await PlaceApiProvider(sessionToken)
                         .getPlaceDetailFromId(result.placeId);
-                    var latlongg = await PlaceApiProvider(sessionToken)
-                        .getPlaceDetailFromId(result.description);
+                    // var latlongg = await PlaceApiProvider(sessionToken)
+                    //     .getPlaceDetailFromId(result.description);
                     //int l = result.description.length;
                     log("hiiiii $latlong");
+                    final marker = Marker(
+                      markerId: const MarkerId("current"),
+                      infoWindow: const InfoWindow(
+                        title: "Pickup Location",
+                      ),
+                      position: LatLng(latlong["lat"], latlong['lng']),
+                    );
+                    // if (!mounted) {
+                    //   log("not Mounted");
+                    //   return;
+                    // }
+                    context.read<AppMap>().moveMap(
+                          latlong["lat"],
+                          latlong['lng'],
+                        );
+                    // ignore: use_build_context_synchronously
+                    context.read<AppMap>().addMarker(marker);
                   },
                   keyboardType: TextInputType.none,
                   controller: locationController,
