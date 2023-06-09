@@ -7,7 +7,6 @@ Color white = const Color.fromARGB(241, 255, 255, 255);
 Color green = const Color.fromARGB(240, 8, 164, 44);
 Color grey = const Color.fromARGB(255, 231, 231, 231);
 int selectedJob = 0;
-bool isWorker = false;
 
 openDialPad(String phoneNumber) async {
   Uri url = Uri(scheme: "tel", path: phoneNumber);

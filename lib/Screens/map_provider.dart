@@ -5,8 +5,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AppMap with ChangeNotifier {
   Completer<GoogleMapController> controller = Completer<GoogleMapController>();
+  bool isWorker = false;
 
   Map<String, Marker> markers = {};
+
+  void changeMode(bool mode) {
+    isWorker = mode;
+    notifyListeners();
+  }
 
   createMap() {}
   void addMarker(Marker m) {

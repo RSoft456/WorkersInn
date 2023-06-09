@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:workers_inn/Screens/address_search.dart';
+import 'package:workers_inn/Screens/location_provider.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/Screens/place_service.dart';
 import 'package:workers_inn/Screens/requests.dart';
@@ -23,7 +24,6 @@ class MapOverlay extends StatefulWidget {
 class _MapOverlayState extends State<MapOverlay> {
   String job = "";
   Color cardColor = green;
-  TextEditingController locationController = TextEditingController();
 
   @override
   void initState() {
@@ -76,9 +76,19 @@ class _MapOverlayState extends State<MapOverlay> {
         ),
         position: LatLng(loc.latitude!, loc.longitude!),
       );
+      if (!mounted) return;
       context.read<AppMap>().moveMap(loc.latitude!, loc.longitude!);
       context.read<AppMap>().addMarker(marker);
-      locationController.text = "Your Location";
+      if (context.read<AppMap>().isWorker) {
+        context
+            .read<LocationProvider>()
+            .setDataforWorker("Worker", loc.latitude!, loc.longitude!);
+      } else {
+        context
+            .read<LocationProvider>()
+            .setDataforClient("Worker", loc.latitude!, loc.longitude!);
+      }
+      context.read<LocationProvider>().setControllerText("Your Location");
     }
   }
 
@@ -275,7 +285,10 @@ class _MapOverlayState extends State<MapOverlay> {
                           }
                           var latlong = await PlaceApiProvider(sessionToken)
                               .getPlaceDetailFromId(result.placeId);
-                          locationController.text = result.description;
+                          context
+                              .read<LocationProvider>()
+                              .setControllerText(result.description);
+                          //locationController.text = result.description;
                           // var latlongg = await PlaceApiProvider(sessionToken)
                           //     .getPlaceDetailFromId(result.description);
                           //int l = result.description.length;
@@ -299,7 +312,7 @@ class _MapOverlayState extends State<MapOverlay> {
                           context.read<AppMap>().addMarker(marker);
                         },
                         keyboardType: TextInputType.none,
-                        controller: locationController,
+                        controller: context.read<LocationProvider>().controller,
                         decoration: textFieldDecoration,
                       ),
                     ),
@@ -321,7 +334,11 @@ class _MapOverlayState extends State<MapOverlay> {
                                   MaterialStateProperty.all(orange)),
                           onPressed: () {
                             if (selectedJob == 0 ||
-                                locationController.text == '') {
+                                context
+                                        .read<LocationProvider>()
+                                        .controller
+                                        .text ==
+                                    '') {
                               showDialog(
                                   barrierDismissible: false,
                                   context: context,
