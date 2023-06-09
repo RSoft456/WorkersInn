@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:workers_inn/Screens/drawer.dart';
 import 'package:workers_inn/Screens/mapOverlay.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
+import 'package:workers_inn/workerModule/WorkerMapOverlay.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -64,32 +65,38 @@ class MainScreenState extends State<MainScreen> {
                 mapType: MapType.normal,
                 initialCameraPosition: _kGooglePlex,
                 onMapCreated: (GoogleMapController controller) {
-                  //if (context.read<AppMap>().controller.isCompleted) return;
+                  if (context.read<AppMap>().controller.isCompleted) return;
                   context.read<AppMap>().controller.complete(controller);
-                  log("map created");
+                  //log("map created");
 
                   // _controller.complete(controller);
                 },
-                onTap: (argument) {
-                  final marker = Marker(
-                    markerId: const MarkerId("current"),
-                    infoWindow: const InfoWindow(
-                      title: "Pickup Location",
-                    ),
-                    position: LatLng(argument.latitude, argument.longitude),
-                  );
-                  // if (!mounted) {
-                  //   log("not Mounted");
-                  //   return;
-                  // }
-                  context.read<AppMap>().addMarker(marker);
-                  log("${context.read<AppMap>().markers}");
-                  //setState(() {});
-                },
+                // onTap: (argument) {
+                //   final marker = Marker(
+                //     markerId: const MarkerId("current"),
+                //     infoWindow: const InfoWindow(
+                //       title: "Pickup Location",
+                //     ),
+                //     position: LatLng(argument.latitude, argument.longitude),
+                //   );
+                //   // if (!mounted) {
+                //   //   log("not Mounted");
+                //   //   return;
+                //   // }
+                //   context.read<AppMap>().addMarker(marker);
+                //   //log("${context.read<AppMap>().markers}");
+                //   //setState(() {});
+                // },
                 markers: context.read<AppMap>().markers.values.toSet(),
               );
             }),
-            const MapOverlay(),
+            Consumer<AppMap>(
+              builder: (context, value, _) {
+                return context.read<AppMap>().isWorker
+                    ? const WorkerMapOverlay()
+                    : const MapOverlay();
+              },
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton(

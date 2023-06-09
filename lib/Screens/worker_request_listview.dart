@@ -35,8 +35,7 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                         fit: BoxFit.fill,
                       )),
                 ),
-                SizedBox(
-                  width: Screensize.width * 0.65,
+                Expanded(
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
@@ -180,25 +179,16 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                         padding: EdgeInsets.all(4),
                         child: Text("Age: 34"),
                       )),
-                  Wrap(
+                  const Wrap(
                     children: [
-                      Padding(
-                        padding: EdgeInsets.all(screen.width * 0.01),
-                        child: const Chip(
-                          label: Text("Plumber"),
-                        ),
+                      Chip(
+                        label: Text("Plumber"),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(screen.width * 0.01),
-                        child: const Chip(
-                          label: Text("Electrician"),
-                        ),
+                      Chip(
+                        label: Text("Electrician"),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(screen.width * 0.01),
-                        child: const Chip(
-                          label: Text("Cleaner"),
-                        ),
+                      Chip(
+                        label: Text("Cleaner"),
                       ),
                     ],
                   ),
@@ -210,21 +200,25 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                           "Description: ",
                         ),
                       )),
-                  Align(
+                  Expanded(
+                    child: Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 5, top: 5, bottom: 5),
-                          child: Card(
-                            // color: const Color.fromARGB(255, 228, 216, 177),
-                            child: SingleChildScrollView(
-                              child: SizedBox(
-                                height: screen.height * 0.04,
-                                child: const Text(
-                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
-                              ),
+                        padding:
+                            const EdgeInsets.only(left: 5, top: 5, bottom: 5),
+                        child: Card(
+                          // color: const Color.fromARGB(255, 228, 216, 177),
+                          child: SingleChildScrollView(
+                            child: SizedBox(
+                              height: screen.height * 0.04,
+                              child: const Text(
+                                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
                             ),
-                          ))),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
