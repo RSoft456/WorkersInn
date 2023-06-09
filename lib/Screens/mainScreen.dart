@@ -64,9 +64,9 @@ class MainScreenState extends State<MainScreen> {
                 mapType: MapType.normal,
                 initialCameraPosition: _kGooglePlex,
                 onMapCreated: (GoogleMapController controller) {
-                  //if (context.read<AppMap>().controller.isCompleted) return;
+                  if (context.read<AppMap>().controller.isCompleted) return;
                   context.read<AppMap>().controller.complete(controller);
-                  log("map created");
+                  //log("map created");
 
                   // _controller.complete(controller);
                 },
@@ -83,7 +83,7 @@ class MainScreenState extends State<MainScreen> {
                   //   return;
                   // }
                   context.read<AppMap>().addMarker(marker);
-                  log("${context.read<AppMap>().markers}");
+                  //log("${context.read<AppMap>().markers}");
                   //setState(() {});
                 },
                 markers: context.read<AppMap>().markers.values.toSet(),

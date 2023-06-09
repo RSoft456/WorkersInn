@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
       title: 'WorkersInn',
       theme: ThemeData(
         primarySwatch: Colors.orange,
+        //inputDecorationTheme: InputDecorationTheme()
       ),
       //home: user != null ? const Home() : const SignIn(),
       home: const Splash(),

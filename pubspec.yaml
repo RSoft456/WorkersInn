@@ -50,6 +50,7 @@ dependencies:
   permission_handler: 
   cloud_firestore: 
   google_sign_in: 
+  location:
 
 dev_dependencies:
   flutter_test:
