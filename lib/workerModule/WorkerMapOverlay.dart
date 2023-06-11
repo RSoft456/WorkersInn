@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:workers_inn/Screens/searchLocation.dart';
 import 'package:workers_inn/variables.dart';
 import 'package:workers_inn/workerModule/workerRequestPage.dart';
 
@@ -25,7 +26,7 @@ class _WorkerMapOverlayState extends State<WorkerMapOverlay> {
           top: MediaQuery.of(context).size.height * 0.7,
         ),
         decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 255, 255, 255),
+            //color: Color.fromARGB(255, 255, 255, 255),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(45), topRight: Radius.circular(45))),
 
@@ -33,39 +34,7 @@ class _WorkerMapOverlayState extends State<WorkerMapOverlay> {
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: TextField(
-                      onTap: () {
-                        showModalBottomSheet(
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(45),
-                                    topRight: Radius.circular(45))),
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) {
-                              return Wrap(
-                                children: [
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.9,
-                                    child: const locationSearcher(),
-                                  )
-                                ],
-                              );
-                            });
-                      },
-                      keyboardType: TextInputType.none,
-                      controller: locationController,
-                      decoration: textFieldDecoration),
-                ),
-              ),
-            ),
+            Expanded(child: Container()),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: SizedBox(
@@ -80,39 +49,31 @@ class _WorkerMapOverlayState extends State<WorkerMapOverlay> {
                                     BorderRadius.all(Radius.circular(20)))),
                         backgroundColor: MaterialStateProperty.all(orange)),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const WorkRequestPage()));
-                      // if (selectedJob == 0) {
-                      //   showDialog(
-                      //       barrierDismissible: false,
-                      //       context: context,
-                      //       builder: (context) {
-                      //         return AlertDialog(
-                      //           content: const Text("please select a job"),
-                      //           actions: [
-                      //             ElevatedButton(
-                      //                 onPressed: () {
-                      //                   Navigator.pop(context);
-                      //                 },
-                      //                 child: const Text("ok")),
-                      //           ],
-                      //         );
-                      //       });
-                      // } else {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => const RequestsPage()));
-                      // }
+                      FirebaseFirestore.instance
+                          .collection("Customers")
+                          .doc(FirebaseAuth.instance.currentUser?.email)
+                          .get()
+                          .then((value) {
+                        var Workerdata = value.data()!;
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WorkRequestPage(
+                                      services: Workerdata["services"],
+                                    )));
+                      });
                     },
                     child: const Text(
-                      'Start Accepting Requests',
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                      'Check Requests',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
                     )),
               ),
+            ),
+            const SizedBox(
+              height: 40,
             )
           ],
         ));

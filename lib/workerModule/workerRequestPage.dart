@@ -1,16 +1,35 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:workers_inn/workerModule/customerRequestsList.dart';
 
 import '../variables.dart';
 
 class WorkRequestPage extends StatefulWidget {
-  const WorkRequestPage({super.key});
-
+  const WorkRequestPage({super.key, required this.services});
+  final List<dynamic> services;
   @override
   State<WorkRequestPage> createState() => _WorkRequestPageState();
 }
 
 class _WorkRequestPageState extends State<WorkRequestPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    log("${widget.services}");
+    // FirebaseFirestore.instance
+    //     .collection("orders")
+    //     .where("service", whereIn: widget.services)
+    //     .get()
+    //     .then((value) {
+    //   for (var element in value.docs) {
+    //     log("${element.data()}");
+    //   }
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size Screensize = MediaQuery.of(context).size;
@@ -58,13 +77,26 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
                 )),
           ],
         ),
-        body: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          itemCount: 8,
-          itemBuilder: (context, index) {
-            return const WorkerRequestList();
-          },
-        ),
+        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: FirebaseFirestore.instance
+                .collection("orders")
+                .where("service", whereIn: widget.services)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+
+              return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: snapshot.data?.docs.length,
+                itemBuilder: (context, index) {
+                  return WorkerRequestList(
+                    data: snapshot.data!.docs[index].data(),
+                  );
+                },
+              );
+            }),
       ),
     );
   }

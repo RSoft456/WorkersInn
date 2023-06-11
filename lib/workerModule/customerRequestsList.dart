@@ -1,16 +1,29 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:workers_inn/features/countDown.dart';
 
 import 'NegitiationScreenWorker.dart';
 
 class WorkerRequestList extends StatefulWidget {
-  const WorkerRequestList({super.key});
-
+  const WorkerRequestList({super.key, required this.data});
+  final Map<String, dynamic> data;
   @override
   State<WorkerRequestList> createState() => _WorkerRequestListState();
 }
 
 class _WorkerRequestListState extends State<WorkerRequestList> {
+  var ClientReqData;
+  String name = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    log("${widget.data}");
+    loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -47,19 +60,19 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                           right: screenSize.width * 0.1),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            "John Doe",
-                            style: TextStyle(fontSize: 22),
+                            name,
+                            style: const TextStyle(fontSize: 22),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.only(top: 8.0),
                             child: Text(
                               "Rating: 4.5",
                               style: TextStyle(fontSize: 16),
                             ),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.only(top: 8.0),
                             child: Text(
                               "4km",
@@ -128,5 +141,16 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
         ],
       ),
     );
+  }
+
+  void loadData() {
+    FirebaseFirestore.instance
+        .collection("Customers")
+        .where("uid", isEqualTo: widget.data["ClientId"])
+        .get()
+        .then((value) {
+      name = value.docs[0].data()["displayName"];
+      setState(() {});
+    });
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,7 +13,6 @@ import 'package:workers_inn/Screens/address_search.dart';
 import 'package:workers_inn/Screens/location_provider.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/Screens/place_service.dart';
-import 'package:workers_inn/Screens/requests.dart';
 import 'package:workers_inn/variables.dart';
 
 class MapOverlay extends StatefulWidget {
@@ -144,8 +145,7 @@ class _MapOverlayState extends State<MapOverlay> {
                       width: MediaQuery.of(context).size.width * 0.79,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        child: Row(mainAxisAlignment: MainAxisAlignment.center,
                             //scrollDirection: Axis.horizontal,
                             children: [
                               InkWell(
@@ -332,7 +332,7 @@ class _MapOverlayState extends State<MapOverlay> {
                                           Radius.circular(20)))),
                               backgroundColor:
                                   MaterialStateProperty.all(orange)),
-                          onPressed: () {
+                          onPressed: () async {
                             if (selectedJob == 0 ||
                                 context
                                         .read<LocationProvider>()
@@ -363,11 +363,29 @@ class _MapOverlayState extends State<MapOverlay> {
                                   });
                             } else {
                               selectedJob = 0;
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RequestsPage()));
+                              await FirebaseFirestore.instance
+                                  .collection("orders")
+                                  .add({
+                                "ClientAddress": {
+                                  "long": context
+                                      .read<LocationProvider>()
+                                      .clientAddress
+                                      .lng,
+                                  "lat": context
+                                      .read<LocationProvider>()
+                                      .clientAddress
+                                      .lat,
+                                },
+                                "status": "pending",
+                                "service": job,
+                                "ClientId":
+                                    FirebaseAuth.instance.currentUser?.uid,
+                              });
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) =>
+                              //             const RequestsPage()));
                             }
                           },
                           child: const Text(

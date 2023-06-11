@@ -179,8 +179,8 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                         padding: EdgeInsets.all(4),
                         child: Text("Age: 34"),
                       )),
-                  const Wrap(
-                    children: [
+                  Wrap(
+                    children: const [
                       Chip(
                         label: Text("Plumber"),
                       ),
