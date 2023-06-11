@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workers_inn/workerModule/AppProvider.dart';
 import 'package:workers_inn/workerModule/customerRequestsList.dart';
 
 import '../variables.dart';
@@ -87,12 +89,27 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
                 return const CircularProgressIndicator();
               }
 
-              return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: snapshot.data?.docs.length,
-                itemBuilder: (context, index) {
-                  return WorkerRequestList(
-                    data: snapshot.data!.docs[index].data(),
+              return Consumer<AppProvider>(
+                builder: (context, value, child) {
+                  return ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: snapshot.data?.docs.length,
+                    itemBuilder: (context, index) {
+                      int length = int.parse("${snapshot.data?.docs.length}");
+                      if (context
+                          .read<AppProvider>()
+                          .removeIds
+                          .contains(snapshot.data!.docs[index].id)) {
+                        index++;
+                      }
+                      if (index >= length) {
+                        return Container();
+                      }
+                      return WorkerRequestList(
+                        data: snapshot.data!.docs[index].data(),
+                        docId: snapshot.data!.docs[index].id,
+                      );
+                    },
                   );
                 },
               );

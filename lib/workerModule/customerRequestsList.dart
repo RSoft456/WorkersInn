@@ -1,14 +1,17 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workers_inn/features/countDown.dart';
-
-import 'NegitiationScreenWorker.dart';
+import 'package:provider/provider.dart';
+import 'package:workers_inn/variables.dart';
+import 'package:workers_inn/workerModule/AppProvider.dart';
 
 class WorkerRequestList extends StatefulWidget {
-  const WorkerRequestList({super.key, required this.data});
+  const WorkerRequestList({super.key, required this.data, required this.docId});
   final Map<String, dynamic> data;
+  final String docId;
   @override
   State<WorkerRequestList> createState() => _WorkerRequestListState();
 }
@@ -16,12 +19,15 @@ class WorkerRequestList extends StatefulWidget {
 class _WorkerRequestListState extends State<WorkerRequestList> {
   var ClientReqData;
   String name = "";
+  int time = 10;
+  Timer? timer;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     log("${widget.data}");
     loadData();
+    startTimer(context);
   }
 
   @override
@@ -87,23 +93,12 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                 Column(
                   children: [
                     Container(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.09,
-                        // child: ElevatedButton(
-                        //   style: ElevatedButton.styleFrom(
-                        //       //alignment: const Alignment(-6, 0),
-                        //       backgroundColor:
-                        //           const Color.fromARGB(255, 255, 255, 255),
-                        //       shape: RoundedRectangleBorder(
-                        //           borderRadius: BorderRadius.circular(50))),
-                        //   onPressed: () {},
-                        child: const CountDown(),
-
-                        // const Text(
-                        //   "4",
-                        //   style: TextStyle(color: Colors.black),
-                        // ),
-                        //),
+                      padding: const EdgeInsets.all(10),
+                      decoration:
+                          BoxDecoration(shape: BoxShape.circle, color: orange),
+                      child: Text(
+                        time.toString(),
+                        style: TextStyle(color: white),
                       ),
                     )
                   ],
@@ -125,9 +120,25 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const NegotiationWorker()));
+                    onPressed: () async {
+                      FirebaseFirestore.instance
+                          .collection("orders")
+                          .doc(widget.docId)
+                          .get()
+                          .then((value) {
+                        var data = value.data()!;
+                        List<dynamic> ids = data["ListOfWorkerId"];
+                        ids.add(FirebaseAuth.instance.currentUser?.uid);
+                        FirebaseFirestore.instance
+                            .collection("orders")
+                            .doc(widget.docId)
+                            .update({
+                          "ListOfWorkerId": ids,
+                        });
+                      });
+
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) => const NegotiationWorker()));
                     },
                     child: const Text(
                       "Accept",
@@ -150,6 +161,19 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
         .get()
         .then((value) {
       name = value.docs[0].data()["displayName"];
+      setState(() {});
+    });
+  }
+
+  void startTimer(BuildContext context) {
+    timer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (time == 0) {
+        timer.cancel();
+        print("removing + ${widget.docId}");
+        context.read<AppProvider>().removeIs(widget.docId);
+        return;
+      }
+      time--;
       setState(() {});
     });
   }

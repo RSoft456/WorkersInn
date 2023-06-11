@@ -8,6 +8,7 @@ import 'package:workers_inn/Screens/chats_class_provider.dart';
 import 'package:workers_inn/Screens/location_provider.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/firebase_options.dart';
+import 'package:workers_inn/workerModule/AppProvider.dart';
 
 import 'RegistrationPages/signin.dart';
 import 'Screens/home.dart';
@@ -23,6 +24,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AllChats()),
         ChangeNotifierProvider(create: (_) => AppMap()),
         ChangeNotifierProvider(create: (_) => LocationProvider()),
+        ChangeNotifierProvider(create: (_) => AppProvider()),
       ],
       child: MyApp(),
     ),
