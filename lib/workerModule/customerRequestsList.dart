@@ -170,7 +170,7 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
       if (time == 0) {
         timer.cancel();
         print("removing + ${widget.docId}");
-        context.read<AppProvider>().removeIs(widget.docId);
+        context.read<AppProvider>().removeDocument(widget.docId);
         return;
       }
       time--;

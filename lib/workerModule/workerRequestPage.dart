@@ -30,6 +30,8 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
     //     log("${element.data()}");
     //   }
     // });
+    //LoadData(context);
+    LoadSnapShot(context);
   }
 
   @override
@@ -79,42 +81,96 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
                 )),
           ],
         ),
-        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: FirebaseFirestore.instance
-                .collection("orders")
-                .where("service", whereIn: widget.services)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-
-              return Consumer<AppProvider>(
-                builder: (context, value, child) {
-                  return ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: snapshot.data?.docs.length,
-                    itemBuilder: (context, index) {
-                      int length = int.parse("${snapshot.data?.docs.length}");
-                      if (context
-                          .read<AppProvider>()
-                          .removeIds
-                          .contains(snapshot.data!.docs[index].id)) {
-                        index++;
-                      }
-                      if (index >= length) {
-                        return Container();
-                      }
-                      return WorkerRequestList(
-                        data: snapshot.data!.docs[index].data(),
-                        docId: snapshot.data!.docs[index].id,
-                      );
-                    },
-                  );
-                },
-              );
-            }),
+        body: Consumer<AppProvider>(
+          builder: (context, value, child) {
+            var list = context.read<AppProvider>().documents;
+            return ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                int length = int.parse("${list.length}");
+                // if (context
+                //     .read<AppProvider>()
+                //     .removeIds
+                //     .contains(list[index].id)) {
+                //   index++;
+                // }
+                // if (index >= length) {
+                //   return Container();
+                // }
+                return WorkerRequestList(
+                  data: list[index].data()!,
+                  docId: list[index].id,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
+
+  void LoadSnapShot(BuildContext context) {
+    context.read<AppProvider>().attachSnapshot(FirebaseFirestore.instance
+        .collection("orders")
+        .where("service", whereIn: widget.services)
+        .snapshots());
+    context.read<AppProvider>().snapShot?.listen((event) {
+      for (var element in event.docChanges) {
+        if (element.type == DocumentChangeType.added) {
+          context.read<AppProvider>().addDocument(element.doc);
+        }
+      }
+    });
+  }
+
+  void LoadData(BuildContext context) {
+    context.read<AppProvider>().documents.clear();
+    FirebaseFirestore.instance
+        .collection("orders")
+        .where("service", whereIn: widget.services)
+        .where("status", isEqualTo: "pending")
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        context.read<AppProvider>().addDocument(element);
+      }
+      LoadSnapShot(context);
+    });
+  }
 }
+
+// StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+//             stream: FirebaseFirestore.instance
+//                 .collection("orders")
+//                 .where("service", whereIn: widget.services)
+//                 .snapshots(),
+//             builder: (context, snapshot) {
+//               if (snapshot.connectionState == ConnectionState.waiting) {
+//                 return const CircularProgressIndicator();
+//               }
+//               return Consumer<AppProvider>(
+//                 builder: (context, value, child) {
+//                   return ListView.builder(
+//                     physics: const BouncingScrollPhysics(),
+//                     itemCount: snapshot.data?.docs.length,
+//                     itemBuilder: (context, index) {
+//                       int length = int.parse("${snapshot.data?.docs.length}");
+//                       if (context
+//                           .read<AppProvider>()
+//                           .removeIds
+//                           .contains(snapshot.data!.docs[index].id)) {
+//                         index++;
+//                       }
+//                       if (index >= length) {
+//                         return Container();
+//                       }
+//                       return WorkerRequestList(
+//                         data: snapshot.data!.docs[index].data(),
+//                         docId: snapshot.data!.docs[index].id,
+//                       );
+//                     },
+//                   );
+//                 },
+//               );
+//             }),
