@@ -13,6 +13,7 @@ import 'package:workers_inn/Screens/address_search.dart';
 import 'package:workers_inn/Screens/location_provider.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/Screens/place_service.dart';
+import 'package:workers_inn/Screens/requests.dart';
 import 'package:workers_inn/variables.dart';
 
 class MapOverlay extends StatefulWidget {
@@ -363,7 +364,7 @@ class _MapOverlayState extends State<MapOverlay> {
                                   });
                             } else {
                               selectedJob = 0;
-                              await FirebaseFirestore.instance
+                              FirebaseFirestore.instance
                                   .collection("orders")
                                   .add({
                                 "ClientAddress": {
@@ -380,12 +381,15 @@ class _MapOverlayState extends State<MapOverlay> {
                                 "service": job,
                                 "ClientId":
                                     FirebaseAuth.instance.currentUser?.uid,
+                              }).then((value) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        RequestsPage(docId: value.id),
+                                  ),
+                                );
                               });
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) =>
-                              //             const RequestsPage()));
                             }
                           },
                           child: const Text(

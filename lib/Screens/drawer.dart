@@ -1,18 +1,89 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:workers_inn/RegistrationPages/signin.dart';
 import 'package:workers_inn/Screens/CustomerSupport.dart';
 import 'package:workers_inn/Screens/history.dart';
+import 'package:workers_inn/Screens/location_provider.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/variables.dart';
 import 'package:workers_inn/workerModule/WorkerRegistration.dart';
 
+import 'package:location/location.dart';
 import 'package:workers_inn/Screens/home.dart';
 
-class drawer extends StatelessWidget {
+class drawer extends StatefulWidget {
   const drawer({super.key});
+
+  @override
+  State<drawer> createState() => _drawerState();
+}
+
+class _drawerState extends State<drawer> {
+  getCurrentLocation() async {
+    var status = await Permission.location.request();
+    if (!mounted) return;
+    if (status.toString() == "PermissionStatus.permanentlyDenied") {
+      showDialog(
+          context: context,
+          builder: (cutie) {
+            return AlertDialog(
+              title: const Text("Permission Denied"),
+              content: const Text("Allow location Permission from setings"),
+              actions: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: orange,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(cutie);
+                  },
+                  child: Text(
+                    "Ok",
+                    style: TextStyle(color: white),
+                  ),
+                ),
+              ],
+            );
+          });
+
+      return;
+    }
+    if (status.toString() == "PermissionStatus.denied") {
+      log("denied");
+
+      log("cutie: $status");
+    } else {
+      log("not denied");
+      Location location = Location();
+      var loc = await location.getLocation();
+      final marker = Marker(
+        markerId: const MarkerId("current"),
+        infoWindow: const InfoWindow(
+          title: "Pickup Location",
+        ),
+        position: LatLng(loc.latitude!, loc.longitude!),
+      );
+      if (!mounted) return;
+      context.read<AppMap>().moveMap(loc.latitude!, loc.longitude!);
+      context.read<AppMap>().addMarker(marker);
+      if (context.read<AppMap>().isWorker) {
+        context
+            .read<LocationProvider>()
+            .setDataforWorker("Worker", loc.latitude!, loc.longitude!);
+      } else {
+        context
+            .read<LocationProvider>()
+            .setDataforClient("Worker", loc.latitude!, loc.longitude!);
+      }
+      context.read<LocationProvider>().setControllerText("Your Location");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +114,7 @@ class drawer extends StatelessWidget {
                           .then((value) {
                         var data = value.data();
                         if (data!["isWorker"] ?? false) {
+                          getCurrentLocation();
                           context.read<AppMap>().changeMode(mode);
                           FirebaseFirestore.instance
                               .collection("Customers")

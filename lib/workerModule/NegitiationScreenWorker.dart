@@ -6,8 +6,8 @@ import 'package:workers_inn/workerModule/RequestInProcessWorker.dart';
 import '../variables.dart';
 
 class NegotiationWorker extends StatefulWidget {
-  const NegotiationWorker({super.key});
-
+  const NegotiationWorker({super.key, required this.orderId});
+  final String orderId;
   @override
   State<NegotiationWorker> createState() => _NegotiationWorkerState();
 }
@@ -33,7 +33,7 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                   icon: const Icon(Icons.call))
             ],
             title: const Text("Negotiate"),
-            leading: BackButton(onPressed: () => Navigator.of(context).pop()),
+            //leading: BackButton(onPressed: () => Navigator.of(context).pop()),
           ),
           body: Column(
             children: [

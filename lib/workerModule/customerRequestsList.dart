@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:workers_inn/variables.dart';
 import 'package:workers_inn/workerModule/AppProvider.dart';
 
+import 'NegitiationScreenWorker.dart';
+
 class WorkerRequestList extends StatefulWidget {
   const WorkerRequestList({super.key, required this.data, required this.docId});
   final Map<String, dynamic> data;
@@ -121,13 +123,22 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange),
                     onPressed: () async {
+                      timer?.cancel();
+                      // showDialog(
+                      //     context: context,
+                      //     barrierDismissible: false,
+                      //     builder: (context) {
+                      //       return const Center(
+                      //         child: CircularProgressIndicator(),
+                      //       );
+                      //     });
                       FirebaseFirestore.instance
                           .collection("orders")
                           .doc(widget.docId)
                           .get()
                           .then((value) {
                         var data = value.data()!;
-                        List<dynamic> ids = data["ListOfWorkerId"];
+                        List<dynamic> ids = data["ListOfWorkerId"] ?? [];
                         ids.add(FirebaseAuth.instance.currentUser?.uid);
                         FirebaseFirestore.instance
                             .collection("orders")
@@ -135,10 +146,22 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                             .update({
                           "ListOfWorkerId": ids,
                         });
-                      });
+                        FirebaseFirestore.instance
+                            .collection("orders")
+                            .doc(widget.docId)
+                            .snapshots()
+                            .listen((event) {
+                          var data = event.data()!;
 
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (context) => const NegotiationWorker()));
+                          if (data["status"] == "negotiating") {
+                            context.read<AppProvider>().documents.clear();
+                            // Navigator.of(context).pop();
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    NegotiationWorker(orderId: widget.docId)));
+                          }
+                        });
+                      });
                     },
                     child: const Text(
                       "Accept",
@@ -169,7 +192,11 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
     timer ??= Timer.periodic(const Duration(seconds: 1), (timer) {
       if (time == 0) {
         timer.cancel();
-        print("removing + ${widget.docId}");
+        log("removing + ${widget.docId}");
+        if (!mounted) {
+          log("not mounted: ${widget.docId}");
+          return;
+        }
         context.read<AppProvider>().removeDocument(widget.docId);
         return;
       }

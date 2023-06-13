@@ -58,3 +58,14 @@ ShowToast(message, ctx) {
   );
   ScaffoldMessenger.of(ctx).showSnackBar(snackBar);
 }
+
+showLoader(BuildContext context) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (ctx) {
+        return const Center(child: CircularProgressIndicator());
+      });
+}
+
+int t = 1;

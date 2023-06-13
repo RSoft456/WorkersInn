@@ -31,7 +31,9 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
     //   }
     // });
     //LoadData(context);
-    LoadSnapShot(context);
+    Future.delayed(const Duration(seconds: 1), () {
+      LoadSnapShot(context);
+    });
   }
 
   @override
@@ -98,6 +100,7 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
                 // if (index >= length) {
                 //   return Container();
                 // }
+                log("building: ${list[index].id}");
                 return WorkerRequestList(
                   data: list[index].data()!,
                   docId: list[index].id,
