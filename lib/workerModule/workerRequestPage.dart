@@ -32,7 +32,7 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
     // });
     //LoadData(context);
     Future.delayed(const Duration(seconds: 1), () {
-      LoadSnapShot(context);
+      LoadData(context); //LoadSnapShot(context);
     });
   }
 
@@ -116,6 +116,7 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
   void LoadSnapShot(BuildContext context) {
     context.read<AppProvider>().attachSnapshot(FirebaseFirestore.instance
         .collection("orders")
+        .where("status", isEqualTo: "pending")
         .where("service", whereIn: widget.services)
         .snapshots());
     context.read<AppProvider>().snapShot?.listen((event) {
@@ -129,17 +130,17 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
 
   void LoadData(BuildContext context) {
     context.read<AppProvider>().documents.clear();
-    FirebaseFirestore.instance
-        .collection("orders")
-        .where("service", whereIn: widget.services)
-        .where("status", isEqualTo: "pending")
-        .get()
-        .then((value) {
-      for (var element in value.docs) {
-        context.read<AppProvider>().addDocument(element);
-      }
-      LoadSnapShot(context);
-    });
+    // FirebaseFirestore.instance
+    //     .collection("orders")
+    //     .where("service", whereIn: widget.services)
+    //     .where("status", isEqualTo: "pending")
+    //     .get()
+    //     .then((value) {
+    //   for (var element in value.docs) {
+    //     context.read<AppProvider>().addDocument(element);
+    //   }
+    LoadSnapShot(context);
+    //});
   }
 }
 
