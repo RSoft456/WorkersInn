@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:workers_inn/Screens/RequestInProcess.dart';
-import 'package:workers_inn/Screens/chat.dart';
 
 import '../variables.dart';
 
@@ -34,7 +33,7 @@ class _NegotiationCustomerState extends State<NegotiationCustomer> {
           ),
           body: Column(
             children: [
-              const ChatScreen(),
+              //const ChatScreen(),
               Row(
                 children: [
                   Padding(

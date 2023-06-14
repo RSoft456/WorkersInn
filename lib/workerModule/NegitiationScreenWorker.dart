@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:workers_inn/Screens/chat.dart';
+import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/workerModule/RequestInProcessWorker.dart';
 
 import '../variables.dart';
@@ -15,6 +19,47 @@ class NegotiationWorker extends StatefulWidget {
 class _NegotiationWorkerState extends State<NegotiationWorker> {
   TextEditingController price = TextEditingController();
   int finalPrice = 0;
+  Map<String, dynamic>? data;
+  String number = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadData();
+  }
+
+  loadData() {
+    //context.read<AppMap>().isWorker
+    FirebaseFirestore.instance
+        .collection("orders")
+        .doc(widget.orderId)
+        .get()
+        .then((value) {
+      data = value.data()!;
+      setState(() {});
+      if (context.read<AppMap>().isWorker) {
+        FirebaseFirestore.instance
+            .collection("Customers")
+            .where("uid", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+            .get()
+            .then((value) {
+          var d = value.docs[0].data();
+          number = d['number'].toString();
+        });
+      } else {
+        FirebaseFirestore.instance
+            .collection("Customers")
+            .doc(value['worker'])
+            .get()
+            .then((value) {
+          var d = value.data()!;
+          number = d['number'].toString();
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -28,7 +73,7 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
             actions: [
               IconButton(
                   onPressed: () {
-                    openDialPad("03456478564");
+                    openDialPad(number);
                   },
                   icon: const Icon(Icons.call))
             ],
@@ -37,7 +82,7 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
           ),
           body: Column(
             children: [
-              const ChatScreen(),
+              ChatScreen(docId: widget.orderId),
               Row(
                 children: [
                   Padding(
