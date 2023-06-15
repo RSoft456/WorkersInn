@@ -67,7 +67,7 @@ class _WorkerMapOverlayState extends State<WorkerMapOverlay> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => WorkRequestPage(
-                                      services: Workerdata["services"],
+                                      services: Workerdata["service"],
                                     )));
                       });
                     },

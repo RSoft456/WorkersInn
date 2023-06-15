@@ -157,8 +157,8 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                             context.read<AppProvider>().documents.clear();
                             // Navigator.of(context).pop();
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    NegotiationWorker(orderId: widget.docId)));
+                                builder: (context) => NegotiationWorker(
+                                    orderId: widget.docId, mContext: context)));
                           }
                         });
                       });

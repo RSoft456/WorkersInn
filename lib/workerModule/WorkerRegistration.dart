@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:workers_inn/variables.dart';
-import 'package:workers_inn/workerModule/verification.dart';
 
 class WorkerRegistration extends StatefulWidget {
   const WorkerRegistration({super.key});
@@ -12,9 +13,16 @@ class WorkerRegistration extends StatefulWidget {
 
 class _WorkerRegistrationState extends State<WorkerRegistration> {
   final _formKey = GlobalKey<FormState>();
-  bool? plumber = true;
-  bool? cleaner = true;
-  bool? electrician = true;
+  bool plumber = true;
+  bool cleaner = true;
+  bool electrician = true;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController cnicController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController numberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,10 +79,11 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                           child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a valid email";
+                                return "Enter a valid name";
                               }
                               return null;
                             },
+                            controller: nameController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.person),
                               label: Text("Your Name",
@@ -95,10 +104,11 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                           child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a valid email";
+                                return "Please enter a valid cnic";
                               }
                               return null;
                             },
+                            controller: cnicController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.credit_card),
                               label: Text("Cnic",
@@ -119,10 +129,11 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                           child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a valid email";
+                                return "Please enter country";
                               }
                               return null;
                             },
+                            controller: countryController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.flag),
                               label: Text("Country",
@@ -143,10 +154,11 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                           child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a valid email";
+                                return "Please enter city";
                               }
                               return null;
                             },
+                            controller: cityController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.flag_outlined),
                               label: Text("City",
@@ -167,10 +179,11 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                           child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a valid email";
+                                return "Please enter your address";
                               }
                               return null;
                             },
+                            controller: addressController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.home),
                               label: Text("Address",
@@ -191,10 +204,11 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                           child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Please enter a valid email";
+                                return "Please enter your contact number";
                               }
                               return null;
                             },
+                            controller: numberController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.phone),
                               label: Text("Contact Number",
@@ -213,12 +227,6 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: TextFormField(
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please enter a valid email";
-                              }
-                              return null;
-                            },
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.settings),
                               label: Text("Experience:",
@@ -253,9 +261,9 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                                 activeColor: orange,
 
                                 value: plumber,
-                                onChanged: (bool? value) {
+                                onChanged: (value) {
                                   setState(() {
-                                    plumber = value;
+                                    plumber = value!;
                                   });
                                 },
                                 title: const Text("Plumbing"),
@@ -267,9 +275,9 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                                 //checkbox positioned at right
                                 activeColor: orange,
                                 value: cleaner,
-                                onChanged: (bool? value) {
+                                onChanged: (value) {
                                   setState(() {
-                                    cleaner = value;
+                                    cleaner = value!;
                                   });
                                 },
                                 title: const Text("Cleaning"),
@@ -282,9 +290,9 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                                 activeColor: orange,
 
                                 value: electrician,
-                                onChanged: (bool? value) {
+                                onChanged: (value) {
                                   setState(() {
-                                    electrician = value;
+                                    electrician = value!;
                                   });
                                 },
                                 title: const Text("Electrician"),
@@ -303,8 +311,25 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                                 padding: EdgeInsets.all(
                                     MediaQuery.of(context).size.width * 0.03)),
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const Verification()));
+                              if (_formKey.currentState!.validate()) {
+                                List<String> service = [];
+                                if (plumber) service.add("plumber");
+                                if (cleaner) service.add("cleaner");
+                                if (electrician) service.add("electrician");
+
+                                FirebaseFirestore.instance
+                                    .collection("Customers")
+                                    .doc(
+                                        "${FirebaseAuth.instance.currentUser?.email}")
+                                    .update({
+                                  "isWorker": true,
+                                  "number": numberController.text,
+                                  "service": service,
+                                });
+                              }
+
+                              // Navigator.of(context).push(MaterialPageRoute(
+                              //     builder: (context) => const Verification()));
                             },
                             child: const Text('submit'),
                           ),

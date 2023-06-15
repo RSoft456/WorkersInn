@@ -19,8 +19,8 @@ class _WCchatsState extends State<WCchats> {
         title: const Text("Chat"),
         backgroundColor: orange,
       ),
-      body: const Column(
-        children: [
+      body: Column(
+        children: const [
           //ChatScreen(),
         ],
       ),

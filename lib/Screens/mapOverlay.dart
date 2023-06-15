@@ -379,6 +379,7 @@ class _MapOverlayState extends State<MapOverlay> {
                                 },
                                 "status": "pending",
                                 "service": job,
+                                "price": "00",
                                 "ClientId":
                                     FirebaseAuth.instance.currentUser?.uid,
                               }).then((value) {

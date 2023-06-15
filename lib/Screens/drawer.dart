@@ -15,7 +15,6 @@ import 'package:workers_inn/variables.dart';
 import 'package:workers_inn/workerModule/WorkerRegistration.dart';
 
 import 'package:location/location.dart';
-import 'package:workers_inn/Screens/home.dart';
 
 class drawer extends StatefulWidget {
   const drawer({super.key});
@@ -164,15 +163,15 @@ class _drawerState extends State<drawer> {
               );
             },
           ),
-          ListTile(
-            title: const Text('Customer Mode'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: ((context) => const Home())),
-              );
-            },
-          ),
+          // ListTile(
+          //   title: const Text('Customer Mode'),
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(builder: ((context) => const Home())),
+          //     );
+          //   },
+          // ),
           ListTile(
             title: const Text('History'),
             onTap: () {

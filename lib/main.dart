@@ -7,6 +7,7 @@ import 'package:workers_inn/Screens/chats_class_provider.dart';
 import 'package:workers_inn/Screens/location_provider.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/firebase_options.dart';
+import 'package:workers_inn/variables.dart';
 import 'package:workers_inn/workerModule/AppProvider.dart';
 import 'RegistrationPages/signin.dart';
 import 'Screens/home.dart';
@@ -75,7 +76,7 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         //     gradient: LinearGradient(
         //   colors: [
         //     Color.fromARGB(255, 127, 31, 182),
@@ -86,14 +87,14 @@ class _SplashState extends State<Splash> {
         //   begin: Alignment.topCenter,
         //   end: Alignment.bottomCenter,
         // ),
-        color: Colors.black,
+        color: orange,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
               width: MediaQuery.of(context).size.height * 0.4,
-              child: Image.asset('assets/banner.jpg')),
+              child: Image.asset('assets/banner.png')),
           // if (!isConnected)
           //   SizedBox(
           //     height: MediaQuery.of(context).size.height * 0.02,

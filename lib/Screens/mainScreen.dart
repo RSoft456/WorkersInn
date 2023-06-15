@@ -3,12 +3,15 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:workers_inn/Screens/drawer.dart';
 import 'package:workers_inn/Screens/mapOverlay.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
 import 'package:workers_inn/workerModule/WorkerMapOverlay.dart';
+
+import 'location_provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -42,7 +45,30 @@ class MainScreenState extends State<MainScreen> {
     log("requesting permission");
     final permission = await [
       Permission.location,
-    ].request();
+    ].request().then((value) async {
+      Location location = Location();
+      var loc = await location.getLocation();
+      final marker = Marker(
+        markerId: const MarkerId("current"),
+        infoWindow: const InfoWindow(
+          title: "Pickup Location",
+        ),
+        position: LatLng(loc.latitude!, loc.longitude!),
+      );
+      if (!mounted) return;
+      context.read<AppMap>().moveMap(loc.latitude!, loc.longitude!);
+      context.read<AppMap>().addMarker(marker);
+      if (context.read<AppMap>().isWorker) {
+        context
+            .read<LocationProvider>()
+            .setDataforWorker("Worker", loc.latitude!, loc.longitude!);
+      } else {
+        context
+            .read<LocationProvider>()
+            .setDataforClient("Worker", loc.latitude!, loc.longitude!);
+      }
+      context.read<LocationProvider>().setControllerText("Your Location");
+    });
   }
 
   @override

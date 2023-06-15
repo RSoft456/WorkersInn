@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:workers_inn/Screens/negotiationScreenCustomer.dart';
+import 'package:workers_inn/workerModule/NegitiationScreenWorker.dart';
 
 import '../variables.dart';
 import '../workerModule/AppProvider.dart';
@@ -163,8 +163,10 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                                   "worker": widget.id,
                                 });
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        const NegotiationCustomer()));
+                                    builder: (context) => NegotiationWorker(
+                                          orderId: widget.orderId,
+                                          mContext: context,
+                                        )));
                               },
                               child: const Text(
                                 "Accept",
