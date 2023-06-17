@@ -1,15 +1,16 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:workers_inn/Screens/RequestInProcess.dart';
 import 'package:workers_inn/Screens/chat.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
-import 'package:workers_inn/workerModule/RequestInProcessWorker.dart';
+import 'package:workers_inn/workerModule/AppProvider.dart';
 
+import '../Screens/home.dart';
 import '../variables.dart';
 
 class NegotiationWorker extends StatefulWidget {
@@ -25,7 +26,7 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
   TextEditingController price = TextEditingController();
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? listner;
   int finalPrice = 00;
-  Map<String, dynamic>? data;
+  Map<String, dynamic> data = {};
   String number = '';
 
   @override
@@ -39,7 +40,7 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
 
   loadListener() {
     listner = FirebaseFirestore.instance
-        .collection("order")
+        .collection("orders")
         .doc(widget.orderId)
         .snapshots()
         .listen((event) {
@@ -48,7 +49,17 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
         showCancelledPopUp();
       }
       if (data["price"] != "00" && !context.read<AppMap>().isWorker) {
+        finalPrice = int.parse(data["price"]);
+        setState(() {});
         pricePopUp();
+      }
+      if (data["status"] == "processing" && context.read<AppMap>().isWorker) {
+        Navigator.of(context).pop();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const RequestInProgress(),
+          ),
+        );
       }
     });
   }
@@ -75,21 +86,22 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
   showCancelledPopUp() {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
-          return AlertDialog(
-            title: const Text("Request cancelled"),
-            content: Text(
-                "Request cancelled by ${context.read<AppMap>().isWorker ? 'worker' : 'customer'}"),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(widget.mContext).pop();
-                  },
-                  child: const Text("ok"))
-            ],
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: AlertDialog(
+              title: const Text("Request cancelled"),
+              actions: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => const Home()),
+                          (route) => false);
+                    },
+                    child: const Text("ok"))
+              ],
+            ),
           );
         });
   }
@@ -102,6 +114,7 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
   }
 
   loadData() {
+    context.read<AppProvider>().assignOrderId(widget.orderId);
     //context.read<AppMap>().isWorker
     FirebaseFirestore.instance
         .collection("orders")
@@ -113,7 +126,7 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
       if (context.read<AppMap>().isWorker) {
         FirebaseFirestore.instance
             .collection("Customers")
-            .where("uid", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+            .where("uid", isEqualTo: data['ClientId'])
             .get()
             .then((value) {
           var d = value.docs[0].data();
@@ -122,10 +135,10 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
       } else {
         FirebaseFirestore.instance
             .collection("Customers")
-            .doc(value['worker'])
+            .where("uid", isEqualTo: data['worker'])
             .get()
             .then((value) {
-          var d = value.data()!;
+          var d = value.docs[0].data();
           number = d['number'].toString();
         });
       }
@@ -177,6 +190,7 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                                     return AlertDialog(
                                       content: TextField(
                                         controller: price,
+                                        keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
                                             focusColor: orange,
                                             focusedBorder: OutlineInputBorder(
@@ -206,13 +220,14 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                                               finalPrice =
                                                   int.parse(price.text);
                                               FirebaseFirestore.instance
-                                                  .collection("order")
+                                                  .collection("orders")
                                                   .doc(widget.orderId)
                                                   .update({
                                                 "price": finalPrice.toString()
+                                              }).then((value) {
+                                                setState(() {});
+                                                Navigator.pop(ctx);
                                               });
-                                              setState(() {});
-                                              Navigator.pop(ctx);
                                             },
                                             child: const Text(
                                               "ok",
@@ -253,8 +268,6 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                                     ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(ctx);
-
-                                          Navigator.pop(context);
                                           FirebaseFirestore.instance
                                               .collection("orders")
                                               .doc(widget.orderId)
@@ -272,41 +285,26 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                   if (!isWorker)
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange),
+                            backgroundColor: orange,
+                            disabledBackgroundColor: orange),
                         onPressed: finalPrice == 0
                             ? null
                             : () {
-                                // if (finalPrice != 0) {
-                                //   Future.delayed(const Duration(seconds: 5), () {
-                                //     showDialog(
-                                //       context: context,
-                                //       builder: ((context) {
-                                //         return AlertDialog(
-                                //           content: const Text("Request accepted !!"),
-                                //           actions: [
-                                //             ElevatedButton(
-                                //                 style: ElevatedButton.styleFrom(
-                                //                     backgroundColor: orange),
-                                //                 onPressed: () {
-                                //                   Navigator.of(context).pop();
-
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => isWorker
-                                        ? const RequestInProcessWorker()
-                                        : const RequestInProgress(),
-                                  ),
-                                );
-                                //                 },
-                                //                 child: const Text("Ok")),
-                                //           ],
-                                //         );
-                                //       }),
-                                //     );
-                                //   });
-                                // } else {
-                                //   ShowToast("Enter Price !!", context);
-                                // }
+                                FirebaseFirestore.instance
+                                    .collection("orders")
+                                    .doc(widget.orderId)
+                                    .update({
+                                  "status": "processing",
+                                }).then((value) {
+                                  Navigator.of(context).pop();
+                                  listner?.cancel();
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RequestInProgress(),
+                                    ),
+                                  );
+                                });
                               },
                         child: const Icon(Icons.check_box))
                 ],
@@ -318,10 +316,11 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
 }
 
 openDialPad(String phoneNumber) async {
-  Uri url = Uri(scheme: "tel", path: phoneNumber);
-  if (await canLaunchUrl(url)) {
+  log(phoneNumber);
+  Uri url = Uri.parse("tel:$phoneNumber");
+  try {
     await launchUrl(url);
-  } else {
-    print("Can't open dial pad.");
+  } catch (e) {
+    log("$e");
   }
 }

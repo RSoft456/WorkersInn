@@ -51,9 +51,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         itemCount: data.length,
                         itemBuilder: (context, index) {
                           var doc = data[index].data();
+
                           if (doc['type'] == "user") {
                             return Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: context.read<AppMap>().isWorker
+                                  ? MainAxisAlignment.start
+                                  : MainAxisAlignment.end,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -82,7 +85,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             );
                           } else {
                             return Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: context.read<AppMap>().isWorker
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.start,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -133,7 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             'type': context.read<AppMap>().isWorker
                                 ? "worker"
                                 : "user",
-                            'userName': "Joyhn Doe",
+                            'userName': "John Doe",
                             'TimeStamp': DateTime.now(),
                           });
                           if (mesage.text != "") {
@@ -143,7 +148,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       type: context.read<AppMap>().isWorker
                                           ? "worker"
                                           : "user",
-                                      userName: "Joyhn Doe"),
+                                      userName: "John Doe"),
                                 );
                           }
                         },

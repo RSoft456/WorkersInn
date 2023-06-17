@@ -7,11 +7,15 @@ class AppProvider with ChangeNotifier {
   Stream<DocumentSnapshot<Map<String, dynamic>>>? clientSnaphot;
   List<DocumentSnapshot<Map<String, dynamic>>> documents = [];
   List<String> workersList = [];
-
+  String orderId = "";
   // void removeIs(String id) {
   //   removeIds.add(id);
   //   notifyListeners();
   // }
+
+  assignOrderId(String orderId) {
+    this.orderId = orderId;
+  }
 
   attachSnapshot(Stream<QuerySnapshot<Map<String, dynamic>>> snap) {
     snapShot = snap;

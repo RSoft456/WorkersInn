@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workers_inn/Screens/RequestInProcess.dart';
 
-import '../variables.dart';
-
 class NegotiationCustomer extends StatefulWidget {
   const NegotiationCustomer({super.key});
 
@@ -24,7 +22,7 @@ class _NegotiationCustomerState extends State<NegotiationCustomer> {
             actions: [
               IconButton(
                   onPressed: () {
-                    openDialPad("03456478564");
+                    //  openDialPad("03456478564");
                   },
                   icon: const Icon(Icons.call))
             ],

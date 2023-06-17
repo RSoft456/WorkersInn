@@ -1,9 +1,18 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:workers_inn/Screens/WCchats.dart';
 import 'package:workers_inn/Screens/home.dart';
+import 'package:workers_inn/workerModule/AppProvider.dart';
 
 import '../variables.dart';
+import 'chat.dart';
+import 'map_provider.dart';
 
 class RequestInProcesOverlay extends StatefulWidget {
   const RequestInProcesOverlay({super.key});
@@ -13,38 +22,54 @@ class RequestInProcesOverlay extends StatefulWidget {
 }
 
 class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? listner;
+
   String job = "cleaner";
   Color cardColor = green;
   int amount = 200;
+  String number = "";
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 5), () {
-      showDialog(
-        context: context,
-        builder: ((context) {
-          return WillPopScope(
-            onWillPop: () async {
-              return false;
-            },
-            child: AlertDialog(
-              content: const Text("Request completed !!"),
-              actions: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: orange),
-                    onPressed: () {
-                      Showrating(context);
-                    },
-                    child: Text(
-                      "Ok",
-                      style: TextStyle(color: white),
-                    )),
-              ],
-            ),
-          );
-        }),
-      );
-    });
+    loadListener();
+    loadData();
     super.initState();
+  }
+
+  loadListener() {
+    listner = FirebaseFirestore.instance
+        .collection("orders")
+        .doc(context.read<AppProvider>().orderId)
+        .snapshots()
+        .listen((event) {
+      var data = event.data()!;
+      if (data["status"] == "complete") {
+        Future.delayed(const Duration(seconds: 1), () => Showrating(context));
+      }
+    });
+  }
+
+  loadData() {
+    context
+        .read<AppProvider>()
+        .assignOrderId(context.read<AppProvider>().orderId);
+    //context.read<AppMap>().isWorker
+    FirebaseFirestore.instance
+        .collection("orders")
+        .doc(context.read<AppProvider>().orderId)
+        .get()
+        .then((value) {
+      Map<String, dynamic> data = value.data()!;
+      setState(() {});
+
+      FirebaseFirestore.instance
+          .collection("Customers")
+          .where("uid", isEqualTo: data['worker'])
+          .get()
+          .then((value) {
+        var d = value.docs[0].data();
+        number = d['number'].toString();
+      });
+    });
   }
 
   @override
@@ -178,7 +203,7 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
                                       left: MediaQuery.of(context).size.width *
                                           0.08),
                                   child: InkWell(
-                                    onTap: () => openDialPad("03456478564"),
+                                    onTap: () => openDialPad(number),
                                     child: const Icon(
                                       Icons.call,
                                       color: Colors.orange,
@@ -193,8 +218,8 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
                                     onTap: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const WCchats()),
+                                          builder: (context) => const WCchats(),
+                                        ),
                                       );
                                     },
                                     child: const Icon(
@@ -307,6 +332,15 @@ class _RequestInProcesOverlayState extends State<RequestInProcesOverlay> {
         ),
       ),
     );
+  }
+
+  openDialPad(String phoneNumber) async {
+    Uri url = Uri.parse("tel:$number");
+    try {
+      await launchUrl(url);
+    } catch (e) {
+      log("$e");
+    }
   }
 
   Showrating(ctx) {

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:workers_inn/Screens/AppMapProcess.dart';
 import 'package:workers_inn/Screens/chats_class_provider.dart';
 import 'package:workers_inn/Screens/location_provider.dart';
 import 'package:workers_inn/Screens/map_provider.dart';
@@ -24,6 +25,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AppMap()),
         ChangeNotifierProvider(create: (_) => LocationProvider()),
         ChangeNotifierProvider(create: (_) => AppProvider()),
+        ChangeNotifierProvider(create: (_) => AppMapProcess()),
       ],
       child: MyApp(),
     ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 import 'package:workers_inn/Screens/chat.dart';
 import 'package:workers_inn/variables.dart';
+
+import '../workerModule/AppProvider.dart';
 
 class WCchats extends StatefulWidget {
   const WCchats({super.key});
@@ -19,10 +20,13 @@ class _WCchatsState extends State<WCchats> {
         title: const Text("Chat"),
         backgroundColor: orange,
       ),
-      body: Column(
-        children: const [
-          //ChatScreen(),
-        ],
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: [
+            ChatScreen(docId: context.read<AppProvider>().orderId),
+          ],
+        ),
       ),
     );
   }

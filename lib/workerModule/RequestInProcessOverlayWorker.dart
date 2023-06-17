@@ -1,8 +1,15 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:workers_inn/Screens/WCchats.dart';
-import 'package:workers_inn/workerModule/WorkerMainPage.dart';
+import 'package:workers_inn/workerModule/AppProvider.dart';
 
+import '../Screens/chat.dart';
+import '../Screens/home.dart';
 import '../variables.dart';
 
 class RequestInProcessOverlayWorker extends StatefulWidget {
@@ -18,7 +25,37 @@ class _RequestInProcessOverlayWorkerState
   String job = "cleaner";
   Color cardColor = green;
   int amount = 200;
+  String number = "";
   @override
+  void initState() {
+    loadData();
+    super.initState();
+  }
+
+  loadData() {
+    context
+        .read<AppProvider>()
+        .assignOrderId(context.read<AppProvider>().orderId);
+    //context.read<AppMap>().isWorker
+    FirebaseFirestore.instance
+        .collection("orders")
+        .doc(context.read<AppProvider>().orderId)
+        .get()
+        .then((value) {
+      Map<String, dynamic> data = value.data()!;
+      setState(() {});
+
+      FirebaseFirestore.instance
+          .collection("Customers")
+          .where("uid", isEqualTo: data['ClientId'])
+          .get()
+          .then((value) {
+        var d = value.docs[0].data();
+        number = d['number'].toString();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     InputDecoration textFieldDecoration = InputDecoration(
@@ -152,7 +189,8 @@ class _RequestInProcessOverlayWorkerState
                               InkWell(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => const WCchats()));
+                                    builder: (context) => const WCchats(),
+                                  ));
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.only(
@@ -255,9 +293,16 @@ class _RequestInProcessOverlayWorkerState
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: orange),
                                 onPressed: () {
-                                  Navigator.of(ctx).pop();
-                                  Future.delayed(const Duration(seconds: 1),
-                                      () => Showrating(context));
+                                  FirebaseFirestore.instance
+                                      .collection("orders")
+                                      .doc(context.read<AppProvider>().orderId)
+                                      .update({
+                                    "status": "complete",
+                                  }).then((value) {
+                                    Navigator.of(ctx).pop();
+                                    Future.delayed(const Duration(seconds: 1),
+                                        () => Showrating(context));
+                                  });
                                 },
                                 child: Text(
                                   "Yes",
@@ -277,6 +322,15 @@ class _RequestInProcessOverlayWorkerState
         ],
       ),
     );
+  }
+
+  openDialPad(String phoneNumber) async {
+    Uri url = Uri.parse("tel:$number");
+    try {
+      await launchUrl(url);
+    } catch (e) {
+      log("$e");
+    }
   }
 
   Showrating(ctx) {
@@ -404,7 +458,7 @@ class _RequestInProcessOverlayWorkerState
 
                           Navigator.of(ctxx).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                  builder: (context) => const WorkerMainPage()),
+                                  builder: (context) => const Home()),
                               (route) => false);
                         },
                         child: Text(
@@ -417,8 +471,7 @@ class _RequestInProcessOverlayWorkerState
                               Navigator.pop(ctxx);
                               Navigator.of(ctxx).pushAndRemoveUntil(
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const WorkerMainPage()),
+                                      builder: (context) => const Home()),
                                   (route) => false);
                             }
                           : null,
