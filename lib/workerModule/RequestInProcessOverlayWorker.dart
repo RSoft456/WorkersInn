@@ -8,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:workers_inn/Screens/WCchats.dart';
 import 'package:workers_inn/workerModule/AppProvider.dart';
 
-import '../Screens/chat.dart';
 import '../Screens/home.dart';
 import '../variables.dart';
 
@@ -26,6 +25,7 @@ class _RequestInProcessOverlayWorkerState
   Color cardColor = green;
   int amount = 200;
   String number = "";
+  String name = "";
   @override
   void initState() {
     loadData();
@@ -43,6 +43,7 @@ class _RequestInProcessOverlayWorkerState
         .get()
         .then((value) {
       Map<String, dynamic> data = value.data()!;
+      amount = int.parse(data["price"]);
       setState(() {});
 
       FirebaseFirestore.instance
@@ -52,6 +53,8 @@ class _RequestInProcessOverlayWorkerState
           .then((value) {
         var d = value.docs[0].data();
         number = d['number'].toString();
+        name = d['displayName'];
+        setState(() {});
       });
     });
   }
@@ -172,7 +175,7 @@ class _RequestInProcessOverlayWorkerState
                                 padding: EdgeInsets.only(
                                     top: MediaQuery.of(context).size.width *
                                         0.02),
-                                child: const Text("John Doe "),
+                                child: Text(name),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
@@ -276,39 +279,43 @@ class _RequestInProcessOverlayWorkerState
                       barrierDismissible: false,
                       context: context,
                       builder: ((ctx) {
-                        return AlertDialog(
-                          content: const Text("Request completed ?"),
-                          actions: [
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: orange),
-                                onPressed: () {
-                                  Navigator.of(ctx).pop();
-                                },
-                                child: Text(
-                                  "No",
-                                  style: TextStyle(color: white),
-                                )),
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: orange),
-                                onPressed: () {
-                                  FirebaseFirestore.instance
-                                      .collection("orders")
-                                      .doc(context.read<AppProvider>().orderId)
-                                      .update({
-                                    "status": "complete",
-                                  }).then((value) {
+                        return WillPopScope(
+                          onWillPop: () async => false,
+                          child: AlertDialog(
+                            content: const Text("Request completed ?"),
+                            actions: [
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: orange),
+                                  onPressed: () {
                                     Navigator.of(ctx).pop();
-                                    Future.delayed(const Duration(seconds: 1),
-                                        () => Showrating(context));
-                                  });
-                                },
-                                child: Text(
-                                  "Yes",
-                                  style: TextStyle(color: white),
-                                )),
-                          ],
+                                  },
+                                  child: Text(
+                                    "No",
+                                    style: TextStyle(color: white),
+                                  )),
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: orange),
+                                  onPressed: () {
+                                    FirebaseFirestore.instance
+                                        .collection("orders")
+                                        .doc(
+                                            context.read<AppProvider>().orderId)
+                                        .update({
+                                      "status": "complete",
+                                    }).then((value) {
+                                      Navigator.of(ctx).pop();
+                                      Future.delayed(const Duration(seconds: 1),
+                                          () => Showrating(context));
+                                    });
+                                  },
+                                  child: Text(
+                                    "Yes",
+                                    style: TextStyle(color: white),
+                                  )),
+                            ],
+                          ),
                         );
                       }),
                     );
@@ -353,134 +360,145 @@ class _RequestInProcessOverlayWorkerState
             },
             child: StatefulBuilder(
               builder: (context, setState) {
-                return AlertDialog(
-                  title: const Text("Rate Client !"),
-                  titleTextStyle: TextStyle(
-                      color: orange, fontSize: 19, fontWeight: FontWeight.bold),
-                  titlePadding: EdgeInsets.only(
-                      left: MediaQuery.of(ctx).size.width * 0.23,
-                      top: MediaQuery.of(ctx).size.width * 0.03),
-                  content: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          visibility = true;
-                          rating = 1;
-                          star1 = starFilled;
-                          star2 = starHollow;
-                          star3 = starHollow;
-                          star4 = starHollow;
-                          star5 = starHollow;
-                          setState(() {});
-                        },
-                        child: Icon(
-                          star1,
-                          size: 45,
-                          color: const Color.fromARGB(255, 255, 222, 59),
+                return WillPopScope(
+                  onWillPop: () async => false,
+                  child: AlertDialog(
+                    title: const Text("Rate Client !"),
+                    titleTextStyle: TextStyle(
+                        color: orange,
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold),
+                    titlePadding: EdgeInsets.only(
+                        left: MediaQuery.of(ctx).size.width * 0.23,
+                        top: MediaQuery.of(ctx).size.width * 0.03),
+                    content: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            visibility = true;
+                            rating = 1;
+                            star1 = starFilled;
+                            star2 = starHollow;
+                            star3 = starHollow;
+                            star4 = starHollow;
+                            star5 = starHollow;
+                            setState(() {});
+                          },
+                          child: Icon(
+                            star1,
+                            size: 45,
+                            color: const Color.fromARGB(255, 255, 222, 59),
+                          ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          visibility = true;
-                          rating = 2;
-                          star1 = starFilled;
-                          star2 = starFilled;
-                          star3 = starHollow;
-                          star4 = starHollow;
-                          star5 = starHollow;
-                          setState(() {});
-                        },
-                        child: Icon(
-                          star2,
-                          size: 45,
-                          color: const Color.fromARGB(255, 255, 222, 59),
+                        InkWell(
+                          onTap: () {
+                            visibility = true;
+                            rating = 2;
+                            star1 = starFilled;
+                            star2 = starFilled;
+                            star3 = starHollow;
+                            star4 = starHollow;
+                            star5 = starHollow;
+                            setState(() {});
+                          },
+                          child: Icon(
+                            star2,
+                            size: 45,
+                            color: const Color.fromARGB(255, 255, 222, 59),
+                          ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          visibility = true;
-                          rating = 3;
-                          star1 = starFilled;
-                          star2 = starFilled;
-                          star3 = starFilled;
-                          star4 = starHollow;
-                          star5 = starHollow;
-                          setState(() {});
-                        },
-                        child: Icon(
-                          star3,
-                          size: 45,
-                          color: const Color.fromARGB(255, 255, 222, 59),
+                        InkWell(
+                          onTap: () {
+                            visibility = true;
+                            rating = 3;
+                            star1 = starFilled;
+                            star2 = starFilled;
+                            star3 = starFilled;
+                            star4 = starHollow;
+                            star5 = starHollow;
+                            setState(() {});
+                          },
+                          child: Icon(
+                            star3,
+                            size: 45,
+                            color: const Color.fromARGB(255, 255, 222, 59),
+                          ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          visibility = true;
-                          rating = 4;
-                          star1 = starFilled;
-                          star2 = starFilled;
-                          star3 = starFilled;
-                          star4 = starFilled;
-                          star5 = starHollow;
-                          setState(() {});
-                        },
-                        child: Icon(
-                          star4,
-                          size: 45,
-                          color: const Color.fromARGB(255, 255, 222, 59),
+                        InkWell(
+                          onTap: () {
+                            visibility = true;
+                            rating = 4;
+                            star1 = starFilled;
+                            star2 = starFilled;
+                            star3 = starFilled;
+                            star4 = starFilled;
+                            star5 = starHollow;
+                            setState(() {});
+                          },
+                          child: Icon(
+                            star4,
+                            size: 45,
+                            color: const Color.fromARGB(255, 255, 222, 59),
+                          ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          visibility = true;
-                          rating = 5;
-                          star1 = starFilled;
-                          star2 = starFilled;
-                          star3 = starFilled;
-                          star4 = starFilled;
-                          star5 = starFilled;
-                          setState(() {});
-                        },
-                        child: Icon(
-                          star5,
-                          size: 45,
-                          color: const Color.fromARGB(255, 255, 222, 59),
+                        InkWell(
+                          onTap: () {
+                            visibility = true;
+                            rating = 5;
+                            star1 = starFilled;
+                            star2 = starFilled;
+                            star3 = starFilled;
+                            star4 = starFilled;
+                            star5 = starFilled;
+                            setState(() {});
+                          },
+                          child: Icon(
+                            star5,
+                            size: 45,
+                            color: const Color.fromARGB(255, 255, 222, 59),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: orange,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(ctxx);
+
+                            Navigator.of(ctxx).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()),
+                                (route) => false);
+                          },
+                          child: Text(
+                            "Later",
+                            style: TextStyle(color: white),
+                          )),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: orange,
+                        ),
+                        onPressed: visibility
+                            ? () {
+                                Navigator.pop(ctxx);
+                                Navigator.of(ctxx).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) => const Home()),
+                                    (route) => false);
+                              }
+                            : null,
+                        child: Text(
+                          "Submit",
+                          style: TextStyle(color: white),
                         ),
                       ),
                     ],
                   ),
-                  actions: [
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(ctxx);
-
-                          Navigator.of(ctxx).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => const Home()),
-                              (route) => false);
-                        },
-                        child: Text(
-                          "Later",
-                          style: TextStyle(color: white),
-                        )),
-                    ElevatedButton(
-                      onPressed: visibility
-                          ? () {
-                              Navigator.pop(ctxx);
-                              Navigator.of(ctxx).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => const Home()),
-                                  (route) => false);
-                            }
-                          : null,
-                      child: Text(
-                        "Submit",
-                        style: TextStyle(color: white),
-                      ),
-                    ),
-                  ],
                 );
               },
             ),

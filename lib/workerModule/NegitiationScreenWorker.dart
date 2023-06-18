@@ -66,19 +66,26 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
 
   pricePopUp() {
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: const Text("Price"),
-            content: Text(
-                "Price by worker Rs: $finalPrice \n Press yes if you agree!!"),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("ok"))
-            ],
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: AlertDialog(
+              title: const Text("Price"),
+              content: Text(
+                  "Price by worker Rs: $finalPrice \n Press yes if you agree!!"),
+              actions: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: orange,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("ok"))
+              ],
+            ),
           );
         });
   }
@@ -94,6 +101,9 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
               title: const Text("Request cancelled"),
               actions: [
                 ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: orange,
+                    ),
                     onPressed: () {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (context) => const Home()),
@@ -187,52 +197,57 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (ctx) {
-                                    return AlertDialog(
-                                      content: TextField(
-                                        controller: price,
-                                        keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(
-                                            focusColor: orange,
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide:
-                                                  BorderSide(color: orange),
-                                            ),
-                                            hintText: "Enter Price",
-                                            label: const Text("Enter Price"),
-                                            border: const OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20)))),
-                                      ),
-                                      actions: [
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: orange,
-                                            ),
-                                            onPressed: () {
-                                              Navigator.pop(ctx);
-                                            },
-                                            child: const Text("cancel")),
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: orange,
-                                            ),
-                                            onPressed: () {
-                                              finalPrice =
-                                                  int.parse(price.text);
-                                              FirebaseFirestore.instance
-                                                  .collection("orders")
-                                                  .doc(widget.orderId)
-                                                  .update({
-                                                "price": finalPrice.toString()
-                                              }).then((value) {
-                                                setState(() {});
+                                    return WillPopScope(
+                                      onWillPop: () async => false,
+                                      child: AlertDialog(
+                                        content: TextField(
+                                          controller: price,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                              focusColor: orange,
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide:
+                                                    BorderSide(color: orange),
+                                              ),
+                                              hintText: "Enter Price",
+                                              label: const Text("Enter Price"),
+                                              border: const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              20)))),
+                                        ),
+                                        actions: [
+                                          ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: orange,
+                                              ),
+                                              onPressed: () {
                                                 Navigator.pop(ctx);
-                                              });
-                                            },
-                                            child: const Text(
-                                              "ok",
-                                            )),
-                                      ],
+                                              },
+                                              child: const Text("cancel")),
+                                          ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: orange,
+                                              ),
+                                              onPressed: () {
+                                                finalPrice =
+                                                    int.parse(price.text);
+                                                FirebaseFirestore.instance
+                                                    .collection("orders")
+                                                    .doc(widget.orderId)
+                                                    .update({
+                                                  "price": finalPrice.toString()
+                                                }).then((value) {
+                                                  setState(() {});
+                                                  Navigator.pop(ctx);
+                                                });
+                                              },
+                                              child: const Text(
+                                                "ok",
+                                              )),
+                                        ],
+                                      ),
                                     );
                                   })
                               : null;
@@ -257,26 +272,36 @@ class _NegotiationWorkerState extends State<NegotiationWorker> {
                               barrierDismissible: false,
                               context: context,
                               builder: (ctx) {
-                                return AlertDialog(
-                                  content: const Text("Cancel Request ?"),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(ctx);
-                                        },
-                                        child: const Text("no")),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(ctx);
-                                          FirebaseFirestore.instance
-                                              .collection("orders")
-                                              .doc(widget.orderId)
-                                              .update({"status": "cancelled"});
-                                        },
-                                        child: const Text(
-                                          "yes",
-                                        )),
-                                  ],
+                                return WillPopScope(
+                                  onWillPop: () async => false,
+                                  child: AlertDialog(
+                                    content: const Text("Cancel Request ?"),
+                                    actions: [
+                                      ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: orange,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(ctx);
+                                          },
+                                          child: const Text("no")),
+                                      ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: orange,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(ctx);
+                                            FirebaseFirestore.instance
+                                                .collection("orders")
+                                                .doc(widget.orderId)
+                                                .update(
+                                                    {"status": "cancelled"});
+                                          },
+                                          child: const Text(
+                                            "yes",
+                                          )),
+                                    ],
+                                  ),
                                 );
                               });
                         },

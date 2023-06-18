@@ -15,6 +15,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final ScrollController _controller = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     TextEditingController mesage = TextEditingController();
@@ -48,6 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         return Container();
                       }
                       return ListView.builder(
+                        controller: _controller,
                         itemCount: data.length,
                         itemBuilder: (context, index) {
                           var doc = data[index].data();
@@ -68,12 +71,20 @@ class _ChatScreenState extends State<ChatScreen> {
                                         left: screenSize.width * 0.04,
                                         right: screenSize.width * 0.02),
                                     width: screenSize.width * 0.7,
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(119, 252, 239, 165),
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20),
-                                          topLeft: Radius.circular(20)),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          255, 161, 255, 141),
+                                      borderRadius: context
+                                              .read<AppMap>()
+                                              .isWorker
+                                          ? const BorderRadius.only(
+                                              bottomLeft: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                              topRight: Radius.circular(20))
+                                          : const BorderRadius.only(
+                                              bottomLeft: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                              topLeft: Radius.circular(20)),
                                     ),
                                     child: Text(
                                       doc['msg'],
@@ -99,12 +110,20 @@ class _ChatScreenState extends State<ChatScreen> {
                                         left: screenSize.width * 0.04,
                                         right: screenSize.width * 0.02),
                                     width: screenSize.width * 0.7,
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(119, 248, 239, 190),
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20),
-                                          topRight: Radius.circular(20)),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          119, 248, 239, 190),
+                                      borderRadius: context
+                                              .read<AppMap>()
+                                              .isWorker
+                                          ? const BorderRadius.only(
+                                              bottomLeft: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                              topLeft: Radius.circular(20))
+                                          : const BorderRadius.only(
+                                              bottomLeft: Radius.circular(20),
+                                              bottomRight: Radius.circular(20),
+                                              topRight: Radius.circular(20)),
                                     ),
                                     child: Text(
                                       doc['msg'],
@@ -129,6 +148,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     hintText: "Type message",
                     suffixIcon: IconButton(
                         onPressed: () {
+                          if (mesage.text == "") return;
                           FirebaseFirestore.instance
                               .collection("orders")
                               .doc(widget.docId)
@@ -141,16 +161,22 @@ class _ChatScreenState extends State<ChatScreen> {
                             'userName': "John Doe",
                             'TimeStamp': DateTime.now(),
                           });
-                          if (mesage.text != "") {
-                            context.read<AllChats>().addChat(
-                                  Chat(
-                                      msg: mesage.text,
-                                      type: context.read<AppMap>().isWorker
-                                          ? "worker"
-                                          : "user",
-                                      userName: "John Doe"),
-                                );
-                          }
+                          mesage.text = "";
+                          _controller.animateTo(
+                            _controller.position.maxScrollExtent,
+                            duration: const Duration(seconds: 1),
+                            curve: Curves.fastOutSlowIn,
+                          );
+                          // if (mesage.text != "") {
+                          //   context.read<AllChats>().addChat(
+                          //         Chat(
+                          //             msg: mesage.text,
+                          //             type: context.read<AppMap>().isWorker
+                          //                 ? "worker"
+                          //                 : "user",
+                          //             userName: "John Doe"),
+                          //       );
+                          // }
                         },
                         icon: const Icon(Icons.send)),
                     label: const Text("Type message"),

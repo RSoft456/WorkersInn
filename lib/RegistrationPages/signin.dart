@@ -50,15 +50,21 @@ class _SignInState extends State<SignIn> {
           barrierDismissible: false,
           context: context,
           builder: (context) {
-            return AlertDialog(
-              content: Text(message),
-              actions: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("ok")),
-              ],
+            return WillPopScope(
+              onWillPop: () async => false,
+              child: AlertDialog(
+                content: Text(message),
+                actions: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: orange,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("ok")),
+                ],
+              ),
             );
           });
     }
@@ -84,6 +90,7 @@ class _SignInState extends State<SignIn> {
 
   void loadingIndicator(BuildContext ctx) {
     showDialog(
+        barrierDismissible: false,
         context: ctx,
         builder: (context) {
           return const Center(
@@ -291,6 +298,7 @@ class _SignInState extends State<SignIn> {
                                   log("${e.code} ${e.message}");
                                   Navigator.of(context).pop();
                                   showDialog(
+                                      barrierDismissible: false,
                                       context: context,
                                       builder: (ctx) {
                                         return AlertDialog(

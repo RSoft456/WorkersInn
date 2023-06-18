@@ -1,13 +1,35 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class HistoryList extends StatefulWidget {
-  const HistoryList({super.key});
+  const HistoryList({super.key, required this.service, required this.id});
+  final String service, id;
 
   @override
   State<HistoryList> createState() => _HistoryListState();
 }
 
 class _HistoryListState extends State<HistoryList> {
+  String mnumber = "", mname = "";
+  @override
+  void initState() {
+    FirebaseFirestore.instance
+        .collection("Customers")
+        .where("uid", isEqualTo: widget.id)
+        .get()
+        .then((value2) {
+      log("${value2.docs.first["number"]}");
+      mnumber = value2.docs.first["number"];
+      mname = value2.docs.first["displayName"];
+      setState(() {});
+    });
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size Screensize = MediaQuery.of(context).size;
@@ -41,25 +63,25 @@ class _HistoryListState extends State<HistoryList> {
                           MediaQuery.of(context).size.width * 0.04),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            "John Doe",
-                            style: TextStyle(fontSize: 18),
+                            mname,
+                            style: const TextStyle(fontSize: 18),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 8.0),
+                            padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
-                              "Service: Plumber",
-                              style: TextStyle(fontSize: 16),
+                              "Service: ${widget.service}",
+                              style: const TextStyle(fontSize: 16),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 8.0),
+                            padding: const EdgeInsets.only(top: 8.0),
                             child: SelectableText.rich(
                               TextSpan(
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(fontSize: 16),
                                 children: [
-                                  TextSpan(text: "Contact: 03092346570"),
+                                  TextSpan(text: "Contact: $mnumber"),
                                 ],
                               ),
                             ),

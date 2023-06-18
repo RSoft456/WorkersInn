@@ -327,7 +327,7 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                                   "service": service,
                                 });
                               }
-
+                              Navigator.of(context).pop();
                               // Navigator.of(context).push(MaterialPageRoute(
                               //     builder: (context) => const Verification()));
                             },

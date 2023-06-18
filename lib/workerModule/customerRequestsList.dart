@@ -21,7 +21,7 @@ class WorkerRequestList extends StatefulWidget {
 class _WorkerRequestListState extends State<WorkerRequestList> {
   var ClientReqData;
   String name = "";
-  int time = 10;
+  int time = 15;
   Timer? timer;
   @override
   void initState() {
@@ -73,6 +73,13 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                             name,
                             style: const TextStyle(fontSize: 22),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              "service: ${widget.data["service"]}",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
                           const Padding(
                             padding: EdgeInsets.only(top: 8.0),
                             child: Text(
@@ -83,7 +90,7 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                           const Padding(
                             padding: EdgeInsets.only(top: 8.0),
                             child: Text(
-                              "4km",
+                              "10 m",
                               style: TextStyle(fontSize: 16),
                             ),
                           )
@@ -124,14 +131,26 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                         backgroundColor: Colors.orange),
                     onPressed: () async {
                       timer?.cancel();
-                      // showDialog(
-                      //     context: context,
-                      //     barrierDismissible: false,
-                      //     builder: (context) {
-                      //       return const Center(
-                      //         child: CircularProgressIndicator(),
-                      //       );
-                      //     });
+                      BuildContext ctx = context;
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            ctx = context;
+                            return WillPopScope(
+                              onWillPop: () async => false,
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: orange,
+                              )),
+                            );
+                          });
+                      Future.delayed(const Duration(seconds: 17), () {
+                        Navigator.of(ctx).pop();
+                        context
+                            .read<AppProvider>()
+                            .removeDocument(widget.docId);
+                      });
                       FirebaseFirestore.instance
                           .collection("orders")
                           .doc(widget.docId)
@@ -155,7 +174,7 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
 
                           if (data["status"] == "negotiating") {
                             context.read<AppProvider>().documents.clear();
-                            // Navigator.of(context).pop();
+                            Navigator.of(ctx).pop();
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => NegotiationWorker(
                                     orderId: widget.docId, mContext: context)));

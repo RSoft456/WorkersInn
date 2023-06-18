@@ -107,13 +107,30 @@ class _drawerState extends State<drawer> {
                     return ListTile(
                       title: const Text('Worker Mode'),
                       trailing: Switch(
+                          activeColor: orange,
                           value: context.read<AppMap>().isWorker,
                           onChanged: (mode) {
+                            BuildContext ctx = context;
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  ctx = context;
+                                  return WillPopScope(
+                                    onWillPop: () async => false,
+                                    child: Center(
+                                        child: CircularProgressIndicator(
+                                      color: orange,
+                                    )),
+                                  );
+                                });
                             FirebaseFirestore.instance
                                 .collection("Customers")
                                 .doc(FirebaseAuth.instance.currentUser!.email)
                                 .get()
                                 .then((value) {
+                              Navigator.of(ctx).pop();
+
                               var data = value.data();
                               if (data!["isWorker"] ?? false) {
                                 getCurrentLocation();
@@ -126,39 +143,45 @@ class _drawerState extends State<drawer> {
                                   'active': mode,
                                 });
                               } else {
+                                // Navigator.of(context).pop();
                                 showDialog(
                                     context: context,
                                     builder: (ctx) {
-                                      return AlertDialog(
-                                        title: const Text("Error"),
-                                        content: const Text(
-                                            "You need to Register as Worker"),
-                                        actions: [
-                                          ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: orange,
+                                      return WillPopScope(
+                                        onWillPop: () async => false,
+                                        child: AlertDialog(
+                                          title: const Text("Error"),
+                                          content: const Text(
+                                              "You need to Register as Worker"),
+                                          actions: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: orange,
+                                              ),
+                                              onPressed: () {
+                                                log("hiiiii");
+                                                Navigator.of(ctx).pop();
+
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        const WorkerRegistration(),
+                                                  ),
+                                                );
+                                              },
+                                              child: const Text("Register Now"),
                                             ),
-                                            onPressed: () {
-                                              Navigator.of(ctx).pop();
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const WorkerRegistration(),
-                                                ),
-                                              );
-                                            },
-                                            child: const Text("Register Now"),
-                                          ),
-                                          ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: orange,
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: orange,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(ctx).pop();
+                                              },
+                                              child: const Text("OK"),
                                             ),
-                                            onPressed: () {
-                                              Navigator.of(ctx).pop();
-                                            },
-                                            child: const Text("OK"),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       );
                                     });
                               }
@@ -176,16 +199,17 @@ class _drawerState extends State<drawer> {
                 //     );
                 //   },
                 // ),
-                ListTile(
-                  title: const Text('History'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: ((context) => const History())),
-                    );
-                  },
-                ),
+                if (!context.read<AppMap>().isWorker)
+                  ListTile(
+                    title: const Text('History'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: ((context) => const History())),
+                      );
+                    },
+                  ),
                 ListTile(
                   title: const Text('Support'),
                   onTap: () {

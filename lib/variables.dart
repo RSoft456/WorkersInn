@@ -12,32 +12,35 @@ dialogBox(ctxx, message, positive, negative, popContext) {
       barrierDismissible: false,
       context: ctxx,
       builder: (ctx) {
-        return AlertDialog(
-          content: Text(message),
-          actions: [
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: orange,
-                ),
-                onPressed: () {
-                  Navigator.pop(ctx);
-                },
-                child: Text(negative, style: TextStyle(color: white))),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: orange,
-                ),
-                onPressed: () {
-                  Navigator.pop(ctx);
-                  if (popContext) {
-                    Navigator.pop(ctxx);
-                  }
-                },
-                child: Text(
-                  positive,
-                  style: TextStyle(color: white),
-                )),
-          ],
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            content: Text(message),
+            actions: [
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: orange,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                  },
+                  child: Text(negative, style: TextStyle(color: white))),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: orange,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    if (popContext) {
+                      Navigator.pop(ctxx);
+                    }
+                  },
+                  child: Text(
+                    positive,
+                    style: TextStyle(color: white),
+                  )),
+            ],
+          ),
         );
       });
 }

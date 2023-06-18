@@ -56,24 +56,33 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
                       barrierDismissible: false,
                       context: context,
                       builder: (ctx) {
-                        return AlertDialog(
-                          content: const Text("Cancel Request ?"),
-                          actions: [
-                            ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(ctx);
-                                },
-                                child: const Text("no")),
-                            ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(ctx);
+                        return WillPopScope(
+                          onWillPop: () async => false,
+                          child: AlertDialog(
+                            content: const Text("Cancel Request ?"),
+                            actions: [
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: orange,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(ctx);
+                                  },
+                                  child: const Text("no")),
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: orange,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(ctx);
 
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  "yes",
-                                )),
-                          ],
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    "yes",
+                                  )),
+                            ],
+                          ),
                         );
                       });
                 },
@@ -86,27 +95,33 @@ class _WorkRequestPageState extends State<WorkRequestPage> {
         body: Consumer<AppProvider>(
           builder: (context, value, child) {
             var list = context.read<AppProvider>().documents;
-            return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                int length = int.parse("${list.length}");
-                // if (context
-                //     .read<AppProvider>()
-                //     .removeIds
-                //     .contains(list[index].id)) {
-                //   index++;
-                // }
-                // if (index >= length) {
-                //   return Container();
-                // }
-                log("building: ${list[index].id}");
-                return WorkerRequestList(
-                  data: list[index].data()!,
-                  docId: list[index].id,
-                );
-              },
-            );
+            return list.isEmpty
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: orange,
+                    ),
+                  )
+                : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: list.length,
+                    itemBuilder: (context, index) {
+                      int length = int.parse("${list.length}");
+                      // if (context
+                      //     .read<AppProvider>()
+                      //     .removeIds
+                      //     .contains(list[index].id)) {
+                      //   index++;
+                      // }
+                      // if (index >= length) {
+                      //   return Container();
+                      // }
+                      log("building: ${list[index].id}");
+                      return WorkerRequestList(
+                        data: list[index].data()!,
+                        docId: list[index].id,
+                      );
+                    },
+                  );
           },
         ),
       ),

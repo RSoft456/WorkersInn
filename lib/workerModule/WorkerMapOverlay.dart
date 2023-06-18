@@ -49,19 +49,27 @@ class _WorkerMapOverlayState extends State<WorkerMapOverlay> {
                                     BorderRadius.all(Radius.circular(20)))),
                         backgroundColor: MaterialStateProperty.all(orange)),
                     onPressed: () {
-                      // showDialog(
-                      //     barrierDismissible: false,
-                      //     context: context,
-                      //     builder: (ctx) {
-                      //       return const Center(
-                      //           child: CircularProgressIndicator());
-                      //     });
+                      BuildContext ctx = context;
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            ctx = context;
+                            return WillPopScope(
+                              onWillPop: () async => false,
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: orange,
+                              )),
+                            );
+                          });
+
                       FirebaseFirestore.instance
                           .collection("Customers")
                           .doc(FirebaseAuth.instance.currentUser?.email)
                           .get()
                           .then((value) {
-                        //Navigator.of(context).pop();
+                        Navigator.of(ctx).pop();
                         var Workerdata = value.data()!;
                         Navigator.push(
                             context,

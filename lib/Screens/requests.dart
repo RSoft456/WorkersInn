@@ -70,15 +70,20 @@ class _RequestsPageState extends State<RequestsPage> {
         ),
         body: Consumer<AppProvider>(
           builder: (context, value, child) {
-            return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: context.read<AppProvider>().workersList.length,
-              itemBuilder: (context, index) {
-                return WorkerRequestList(
-                    id: context.read<AppProvider>().workersList[index],
-                    orderId: widget.docId);
-              },
-            );
+            return context.read<AppProvider>().workersList.isEmpty
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: orange,
+                  ))
+                : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: context.read<AppProvider>().workersList.length,
+                    itemBuilder: (context, index) {
+                      return WorkerRequestList(
+                          id: context.read<AppProvider>().workersList[index],
+                          orderId: widget.docId);
+                    },
+                  );
           },
         ),
       ),

@@ -39,25 +39,29 @@ class _MapOverlayState extends State<MapOverlay> {
     if (!mounted) return;
     if (status.toString() == "PermissionStatus.permanentlyDenied") {
       showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (cutie) {
-            return AlertDialog(
-              title: const Text("Permission Denied"),
-              content: const Text("Allow location Permission from setings"),
-              actions: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: orange,
+            return WillPopScope(
+              onWillPop: () async => false,
+              child: AlertDialog(
+                title: const Text("Permission Denied"),
+                content: const Text("Allow location Permission from setings"),
+                actions: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: orange,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(cutie);
+                    },
+                    child: Text(
+                      "Ok",
+                      style: TextStyle(color: white),
+                    ),
                   ),
-                  onPressed: () {
-                    Navigator.pop(cutie);
-                  },
-                  child: Text(
-                    "Ok",
-                    style: TextStyle(color: white),
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           });
 
@@ -245,26 +249,30 @@ class _MapOverlayState extends State<MapOverlay> {
                           if (status.toString() ==
                               "PermissionStatus.permanentlyDenied") {
                             showDialog(
+                                barrierDismissible: false,
                                 context: context,
                                 builder: (cutie) {
-                                  return AlertDialog(
-                                    title: const Text("Permission Denied"),
-                                    content: const Text(
-                                        "Allow location Permission from setings"),
-                                    actions: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: orange,
+                                  return WillPopScope(
+                                    onWillPop: () async => false,
+                                    child: AlertDialog(
+                                      title: const Text("Permission Denied"),
+                                      content: const Text(
+                                          "Allow location Permission from setings"),
+                                      actions: [
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: orange,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(cutie);
+                                          },
+                                          child: Text(
+                                            "Ok",
+                                            style: TextStyle(color: white),
+                                          ),
                                         ),
-                                        onPressed: () {
-                                          Navigator.pop(cutie);
-                                        },
-                                        child: Text(
-                                          "Ok",
-                                          style: TextStyle(color: white),
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   );
                                 });
 
@@ -344,26 +352,43 @@ class _MapOverlayState extends State<MapOverlay> {
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (context) {
-                                    return AlertDialog(
-                                      content: Text(selectedJob == 0
-                                          ? "please select a job"
-                                          : "Please Enter Location"),
-                                      actions: [
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: orange),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              "ok",
-                                              style: TextStyle(color: white),
-                                            )),
-                                      ],
+                                    return WillPopScope(
+                                      onWillPop: () async => false,
+                                      child: AlertDialog(
+                                        content: Text(selectedJob == 0
+                                            ? "please select a job"
+                                            : "Please Enter Location"),
+                                        actions: [
+                                          ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor: orange),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                "ok",
+                                                style: TextStyle(color: white),
+                                              )),
+                                        ],
+                                      ),
                                     );
                                   });
                             } else {
                               selectedJob = 0;
+                              BuildContext ctx = context;
+                              showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) {
+                                    ctx = context;
+                                    return WillPopScope(
+                                      onWillPop: () async => false,
+                                      child: Center(
+                                          child: CircularProgressIndicator(
+                                        color: orange,
+                                      )),
+                                    );
+                                  });
                               FirebaseFirestore.instance
                                   .collection("orders")
                                   .add({
@@ -383,6 +408,7 @@ class _MapOverlayState extends State<MapOverlay> {
                                 "ClientId":
                                     FirebaseAuth.instance.currentUser?.uid,
                               }).then((value) {
+                                Navigator.of(ctx).pop();
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
