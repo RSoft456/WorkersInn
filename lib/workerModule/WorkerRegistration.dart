@@ -22,6 +22,8 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
   TextEditingController cityController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController numberController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +104,33 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Enter a valid age";
+                              }
+                              return null;
+                            },
+                            controller: ageController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.person),
+                              label: Text("Your Age",
+                                  style: GoogleFonts.merriweather()),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Please enter a valid cnic";
@@ -202,6 +231,7 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: TextFormField(
+                            keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Please enter your contact number";
@@ -227,6 +257,7 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: TextFormField(
+                            controller: descriptionController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.settings),
                               label: Text("Experience:",
@@ -325,9 +356,13 @@ class _WorkerRegistrationState extends State<WorkerRegistration> {
                                   "isWorker": true,
                                   "number": numberController.text,
                                   "service": service,
+                                  "age": ageController.text,
+                                  "description": descriptionController.text,
+                                }).then((value) {
+                                  Navigator.of(context).pop();
                                 });
                               }
-                              Navigator.of(context).pop();
+
                               // Navigator.of(context).push(MaterialPageRoute(
                               //     builder: (context) => const Verification()));
                             },

@@ -213,11 +213,11 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(data!['displayName'] ?? "John Doe"),
                     ),
-                    const Align(
+                    Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Text("Age: 34"),
+                          padding: const EdgeInsets.all(4),
+                          child: Text("Age: ${data!['age']} " ?? "Age: 34"),
                         )),
                     Wrap(
                       children: List.castFrom(data!['service'])
@@ -243,8 +243,7 @@ class _WorkerRequestListState extends State<WorkerRequestList> {
                             child: SingleChildScrollView(
                               child: SizedBox(
                                 height: screen.height * 0.04,
-                                child: const Text(
-                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                                child: Text(data!['description'] ?? ""),
                               ),
                             ),
                           ),
